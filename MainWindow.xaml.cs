@@ -27,17 +27,26 @@ namespace Production_Planner
             InitializeComponent();
             disp_products.ItemsSource = DatabaseHandler.GetProducts();
         }
-
         private void BtnNext_Click(object sender, RoutedEventArgs e)
         {
+            OpenProductWindow();
         }
 
+        private void OpenProductWindow()
+        {
+            var selProd = (Product)disp_products.SelectedItem;
+            ProductWindow wnd = new ProductWindow(selProd);
+            wnd.Show();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
 
         private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var selProd = (Product) disp_products.SelectedItem;
-            ProductPage
+            OpenProductWindow();
         }
-
     }
 }

@@ -18,6 +18,13 @@ namespace Production_Planner
 
         public Product() { }
 
+        public Product(int id, string name, double cost_rmb)
+        {
+            Id = id;
+            Name = name;
+            Cost_rmb = cost_rmb;
+            Qty = 0;
+        }
         public Product(int id, string name, double cost_rmb, int qty)
         {
             Id = id;
@@ -28,11 +35,11 @@ namespace Production_Planner
     }
 
 
-    class Part
+    public class Part
     {
-        int Id;
-        string Name;
-        int Order_qty;
+        public int Id;
+        public string Name;
+        public int Order_qty;
 
         public Part(int id, string name, int order_qty)
         {

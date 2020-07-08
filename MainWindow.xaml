@@ -7,8 +7,8 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         Loaded="Window_Loaded">
-    <WrapPanel Orientation="Vertical" Margin="0,0,369,35">
-        <ListBox x:Name="disp_products" HorizontalAlignment="Left" Height="329" Margin="10,10,0,0" VerticalAlignment="Top" Width="400">
+    <WrapPanel Orientation="Vertical" Margin="0,0,0,0">
+        <ListBox x:Name="disp_products" HorizontalAlignment="Left" Width="800" Height="450" Margin="0,0,0,0" VerticalAlignment="Top">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Path=Name}"/>
@@ -21,9 +21,6 @@
                 </Style>
             </ListBox.ItemContainerStyle>
         </ListBox>
-        <Button Click="BtnNext_Click" Height="35" Width="390">
-            <TextBlock Text="Next"/>
-        </Button>
 
     </WrapPanel>
 </Window>
