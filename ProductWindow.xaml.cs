@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using _IO = System.IO;
 
 namespace Production_Planner
 {
@@ -20,7 +21,7 @@ namespace Production_Planner
     public partial class ProductWindow : Window
     {
         private Product currentProd;
-        private List<Part> partsNeeded;
+        private List<PartQty> partsNeeded;
         public ProductWindow(Product selProduct)
         {
             InitializeComponent();
@@ -31,7 +32,9 @@ namespace Production_Planner
         private void GetSpreadsheet()
         {
             ExcelWriter exWrite = new ExcelWriter();
-            exWrite.WriteToExcel(partsNeeded, @"spreadsheet.xlsx");
+            string name = _IO.Path.GetRandomFileName() + ".xlsx";
+            exWrite.WriteToExcel(partsNeeded, name);
+
         }
 
         private void txtExRate_TextChanged(object sender, TextChangedEventArgs e)

@@ -36,7 +36,7 @@ namespace Production_Planner
         {
             var selProd = (Product)disp_products.SelectedItem;
             ProductWindow wnd = new ProductWindow(selProd);
-            wnd.Show();
+            wnd.ShowDialog();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -47,6 +47,17 @@ namespace Production_Planner
         private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             OpenProductWindow();
+        }
+
+        private void btnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            OpenAddWindow();
+        }
+
+        private void OpenAddWindow()
+        {
+            AddWindow wnd = new AddWindow();
+            wnd.Show();
         }
     }
 }

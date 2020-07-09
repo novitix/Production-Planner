@@ -15,13 +15,13 @@ namespace Production_Planner
         _Application excel = new _Excel.Application();
         Workbook wb;
         Worksheet ws;
-        public void WriteToExcel(List<Part> parts, string path)
+        public void WriteToExcel(List<PartQty> parts, string name)
         {
             this.wb = excel.Workbooks.Add(XlWBATemplate.xlWBATWorksheet);
             this.ws = wb.Worksheets[1];
             WriteColumns();
             WriteParts(parts);
-            wb.SaveAs(path);
+            wb.SaveAs(name);
             this.wb.Close();
         }
 
@@ -44,7 +44,7 @@ namespace Production_Planner
             return ((char)number).ToString();
         }
 
-        private void WriteParts(List<Part> parts)
+        private void WriteParts(List<PartQty> parts)
         {
             for (int i = 0; i < parts.Count; i++)
             {

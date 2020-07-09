@@ -49,7 +49,7 @@ namespace Production_Planner
             }
         }
 
-        public static List<Part> GetParts(Product prod)
+        public static List<PartQty> GetParts(Product prod)
         {
             int id = prod.Id;
 
@@ -76,7 +76,7 @@ namespace Production_Planner
             string concatIds = string.Join(", ", ids_list);
             sql = string.Format(@"SELECT * FROM parts WHERE id IN ({0})", concatIds);
             cmd = new SqliteCommand(sql, con);
-            List<Part> res = new List<Part>();
+            var res = new List<PartQty>();
 
             reader = cmd.ExecuteReader();
             while (reader.Read())
@@ -87,9 +87,31 @@ namespace Production_Planner
                 var part_qty = partFindList.Where(i => i.PartId == part_id).FirstOrDefault().Qty;
                 if (part_qty != default)
                 {
-                    res.Add(new Part(part_id, part_name, part_qty));
+                    res.Add(new PartQty(part_id, part_name, part_qty));
                 }
                 
+            }
+            return res;
+        }
+
+
+        public static List<Part> GetParts()
+        {
+            string con_str = GetConString();
+            var partFindList = new List<PartFindRes>();
+            var con = new SqliteConnection(con_str);
+            string sql = "SELECT * FROM parts";
+            con.Open();
+            var cmd = new SqliteCommand(sql, con);
+            var reader = cmd.ExecuteReader();
+            List<Part> res = new List<Part>();
+
+            while (reader.Read())
+            {
+                var part_id = reader.GetInt32(0);
+                var part_name = reader.GetString(1);
+                res.Add(new Part(part_id, part_name));
+
             }
             return res;
         }

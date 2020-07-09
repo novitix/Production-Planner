@@ -7,20 +7,24 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         Loaded="Window_Loaded">
-    <WrapPanel Orientation="Vertical" Margin="0,0,0,0">
-        <ListBox x:Name="disp_products" HorizontalAlignment="Left" Width="800" Height="450" Margin="0,0,0,0" VerticalAlignment="Top">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Path=Name}"/>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <ListBox x:Name="disp_products" HorizontalAlignment="Left" Width="700" Height="450" Margin="0,0,0,0" VerticalAlignment="Top" Grid.Column="0">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Path=Name}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
 
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
-                    <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"></EventSetter>
-                </Style>
-            </ListBox.ItemContainerStyle>
-        </ListBox>
-
-    </WrapPanel>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                        <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"></EventSetter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+        <Button x:Name="btnAdd" Grid.Column="1" VerticalAlignment="Center" Width="80" Height="60" Click="btnAdd_Click">Add</Button>
+    </Grid>
 </Window>

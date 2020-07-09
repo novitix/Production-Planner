@@ -39,13 +39,21 @@ namespace Production_Planner
     {
         public int Id;
         public string Name;
-        public int Order_qty;
 
-        public Part(int id, string name, int order_qty)
+        public Part(int id, string name)
         {
             Id = id;
             Name = name;
-            Order_qty = order_qty;
+        }
+    }
+
+    public class PartQty : Part
+    {
+        public int Order_qty;
+        public PartQty(int id, string name, int order_qty)
+            : base(id, name)
+        {
+            this.Order_qty = order_qty;
         }
     }
 }
