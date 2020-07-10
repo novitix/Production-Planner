@@ -1,43 +1,71 @@
-﻿<Window x:Class="Production_Planner.AddWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Production_Planner"
+        xmlns:Controls="clr-namespace:Aviad.WPF.Controls;assembly=Aviad.WPF.Controls" x:Class="Production_Planner.AddWindow"
         mc:Ignorable="d"
-        Title="AddWindow" Height="450" Width="800">
+        Title="AddWindow" Height="450" Width="400">
     <Grid>
         <StackPanel>
             <GroupBox Header="Parts">
-            <DockPanel Margin="0,5,0,0">
-                <Label Content="Part Name -" DockPanel.Dock="Left"/>
-                <Button x:Name="btnAddPart" Width="80" DockPanel.Dock="Right">Add Part</Button>
-                <TextBox x:Name="txtPartName" Width="Auto" Margin="0,0,5,0"/>
-            </DockPanel>
+                <DockPanel Margin="0,5,0,0">
+                    <Label Content="Part Name" DockPanel.Dock="Left" Width="90"/>
+                    <Button x:Name="btnAddPart" Width="65" DockPanel.Dock="Right" Content="Add Part"/>
+                    <TextBox x:Name="txtPartName" Width="Auto" Margin="0,0,2,0"/>
+                </DockPanel>
             </GroupBox>
 
             <GroupBox Header="Products">
-                <StackPanel Height="Auto">
-                    <DockPanel Margin="0,5,0,0">
-                        <Label Content="Product Name -" DockPanel.Dock="Left"/>
-                        <TextBox x:Name="txtProductName" Width="Auto" Margin="0,0,5,0"/>
-                    </DockPanel>
-
-                    <DockPanel>
-                        <Label Content="Cost (RMB) -" DockPanel.Dock="Left"/>
-                        <TextBox x:Name="txtProdCost" Width="682" Margin="0,0,5,0"/>
-                    </DockPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="65"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
                     
-                    <DockPanel>
-                        <Label Content="Parts List -" DockPanel.Dock="Left"/>
-                        <ComboBox x:Name="cbPartsList" ItemsSource="{Binding Name}" Width="657">
-                        </ComboBox>
-                    </DockPanel>
-                    <ListBox x:Name="lbPartsList" ItemsSource="{Binding Name}" Height="200"/>
+                    <Label Content="Product Name" Grid.Row="0" Grid.Column="0"/>
+                    <TextBox x:Name="txtProductName" Width="Auto" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"/>
 
-                    <Button x:Name="btnAddProduct" Width="80" DockPanel.Dock="Right">Add Product</Button>
-                </StackPanel>
+                    <Label Content="Cost (RMB)" DockPanel.Dock="Left" Grid.Row="1" Grid.Column="0"/>
+                    <TextBox x:Name="txtProdCost"  Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" PreviewTextInput="txtProdCost_PreviewTextInput"/>
+
+                    <Label Content="Parts" DockPanel.Dock="Left" Grid.Row="2" Grid.Column="0"/>
+                    <ComboBox x:Name="cbPartsList" IsEditable="True" TextSearch.TextPath="Name" Grid.Row="2" Grid.Column="1">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <Label Content="Part Qty" Grid.Row="3" Grid.Column="0"/>
+                    <TextBox x:Name="txtPtQty" PreviewTextInput="txtPtQty_PreviewTextInput" Grid.Row="3" Grid.Column="1"/>
+
+                    <Button Grid.Row="2" Grid.RowSpan="2" Grid.Column="2">
+                        <TextBlock Margin="2,2,2,2" TextWrapping="Wrap" TextAlignment="Center">Add Part to Product</TextBlock>
+                    </Button>
+
+                    <Label Content="Added Parts" DockPanel.Dock="Left" Grid.Row="4" Grid.Column="0"/>
+                    <ListBox x:Name="lbPartsList" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Height="200">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate/>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <Button Grid.Row="5" Grid.Column="1" x:Name="btnAddProduct" Width="80" Content="Add Product" Margin="0,2,0,0"/>
+                </Grid>
             </GroupBox>
+           
         </StackPanel>
     </Grid>
 </Window>

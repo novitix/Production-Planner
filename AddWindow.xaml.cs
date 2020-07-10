@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Text.RegularExpressions;
 
 namespace Production_Planner
 {
@@ -28,8 +29,32 @@ namespace Production_Planner
 
             partList = DatabaseHandler.GetParts();
 
-            lbPartsList.DataContext = partList;
-            cbPartsList.DataContext = prodPtList;
+            cbPartsList.ItemsSource = partList;
+            lbPartsList.ItemsSource = prodPtList;
+        }
+
+        private void txtPtQty_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = HasIllegalChars(false, e);
+        }
+
+        private bool HasIllegalChars(bool allowDecimal, TextCompositionEventArgs e)
+        {
+
+            Regex reg;
+            if (allowDecimal)
+            {
+                reg = new Regex("[^0-9.]+");
+            } else
+            {
+                reg = new Regex("[^0-9]+");
+            }
+            return reg.IsMatch(e.Text);
+        }
+
+        private void txtProdCost_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = HasIllegalChars(true, e);
         }
     }
 }

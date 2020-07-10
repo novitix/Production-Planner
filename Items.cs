@@ -37,8 +37,8 @@ namespace Production_Planner
 
     public class Part
     {
-        public int Id;
-        public string Name;
+        public int Id { get; set; }
+        public string Name { get; set; }
 
         public Part(int id, string name)
         {
