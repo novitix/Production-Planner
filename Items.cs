@@ -14,7 +14,6 @@ namespace Production_Planner
         public int Id { get; set; }
         public string Name { get; set; }
         public double Cost_rmb { get; set; }
-        public int Qty { get; set; }
 
         public Product() { }
 
@@ -23,14 +22,6 @@ namespace Production_Planner
             Id = id;
             Name = name;
             Cost_rmb = cost_rmb;
-            Qty = 0;
-        }
-        public Product(int id, string name, double cost_rmb, int qty)
-        {
-            Id = id;
-            Name = name;
-            Cost_rmb = cost_rmb;
-            Qty = qty;
         }
     }
 
@@ -39,21 +30,46 @@ namespace Production_Planner
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public int Type { get; set; }
+        private string _typeName;
 
-        public Part(int id, string name)
+        public Part(int id, string name, int type)
         {
             Id = id;
             Name = name;
+            Type = type;
+        }
+
+        public string GetTypeName()
+        {
+            if (string.IsNullOrEmpty(_typeName))
+            {
+                _typeName = DatabaseHandler.GetPartTypeName(this.Id);
+            }
+
+            return _typeName;
         }
     }
 
     public class PartQty : Part
     {
-        public int Order_qty;
-        public PartQty(int id, string name, int order_qty)
-            : base(id, name)
+        public int OrderQty { get; set; }
+        public PartQty(int id, string name, int type, int orderQty)
+            : base(id, name, type)
         {
-            this.Order_qty = order_qty;
+            this.OrderQty = orderQty;
+        }
+    }
+
+    public class PartType
+    {
+        public int Id { get; set; }
+        public string TypeName { get; set; }
+
+        public PartType(int id, string typeName)
+        {
+            Id = id;
+            TypeName = typeName;
         }
     }
 }

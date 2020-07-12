@@ -31,25 +31,30 @@ namespace Production_Planner
 
         private void GetSpreadsheet()
         {
+            if (String.IsNullOrEmpty(txtExRate.Text) || string.IsNullOrEmpty(txtQty.Text))
+            {
+                MessageBox.Show("Please enter exchange rate and quantity.");
+                return;
+            }
             ExcelWriter exWrite = new ExcelWriter();
             string name = _IO.Path.GetRandomFileName() + ".xlsx";
-            exWrite.WriteToExcel(partsNeeded, name);
-
-        }
-
-        private void txtExRate_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
-        private void txtQty_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
+            double cost = currentProd.Cost_rmb * int.Parse(txtQty.Text);
+            exWrite.WriteToExcel(partsNeeded, name, int.Parse(txtQty.Text), double.Parse(txtExRate.Text), cost);
         }
 
         private void btnGetSs_Click(object sender, RoutedEventArgs e)
         {
             GetSpreadsheet();
+        }
+
+        private void txtExRate_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = Verifier.HasIllegalChars(true, e);
+        }
+
+        private void txtQty_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = Verifier.HasIllegalChars(false, e);
         }
     }
 }

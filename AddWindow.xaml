@@ -6,15 +6,50 @@
         xmlns:local="clr-namespace:Production_Planner"
         xmlns:Controls="clr-namespace:Aviad.WPF.Controls;assembly=Aviad.WPF.Controls" x:Class="Production_Planner.AddWindow"
         mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner"
         Title="AddWindow" Height="450" Width="400">
     <Grid>
         <StackPanel>
-            <GroupBox Header="Parts">
-                <DockPanel Margin="0,5,0,0">
-                    <Label Content="Part Name" DockPanel.Dock="Left" Width="90"/>
-                    <Button x:Name="btnAddPart" Width="65" DockPanel.Dock="Right" Content="Add Part"/>
-                    <TextBox x:Name="txtPartName" Width="Auto" Margin="0,0,2,0"/>
+
+            <GroupBox Header="Part Types">
+                <DockPanel>
+                    <Label Content="Add Part Type" Width="90" DockPanel.Dock="Left"/>
+                    <Button x:Name="btnAddPtType" Width="65" Content="Add Type" Click="btnAddPtType_Click"  DockPanel.Dock="Right"/>
+                    <TextBox x:Name="txtAddPtType" Width="Auto" Margin="0,0,2,0" Grid.Column="1" Grid.Row="0"/>
                 </DockPanel>
+            </GroupBox>
+            <GroupBox Header="Parts">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="65"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+
+
+                    <Label Content="Part Name" Width="90" Grid.Column="0" Grid.Row="1"/>
+                    <TextBox x:Name="txtPartName" Width="Auto" Margin="0,0,2,0" Grid.Column="1" Grid.Row="1"/>
+                    <Button x:Name="btnAddPt" Width="65" Content="Add Part" Click="btnAddPt_Click" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2"/>
+                    
+                    <Label Content="Part Type" Width="90" Grid.Column="0" Grid.Row="2"/>
+                    <ComboBox x:Name="cbPartType" Width="Auto" Margin="0,0,2,0" Grid.Column="1" Grid.Row="2">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding TypeName}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                </Grid>
+                
             </GroupBox>
 
             <GroupBox Header="Products">
@@ -51,18 +86,27 @@
                     <Label Content="Part Qty" Grid.Row="3" Grid.Column="0"/>
                     <TextBox x:Name="txtPtQty" PreviewTextInput="txtPtQty_PreviewTextInput" Grid.Row="3" Grid.Column="1"/>
 
-                    <Button Grid.Row="2" Grid.RowSpan="2" Grid.Column="2">
+                    <Button x:Name="btnPtToProd" Grid.Row="2" Grid.RowSpan="2" Grid.Column="2" Click="btnPtToProd_Click">
                         <TextBlock Margin="2,2,2,2" TextWrapping="Wrap" TextAlignment="Center">Add Part to Product</TextBlock>
                     </Button>
 
                     <Label Content="Added Parts" DockPanel.Dock="Left" Grid.Row="4" Grid.Column="0"/>
                     <ListBox x:Name="lbPartsList" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Height="200">
                         <ListBox.ItemTemplate>
-                            <DataTemplate/>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} ({1}x)">
+                                            <Binding Path="Name"/>
+                                            <Binding Path="OrderQty"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
 
-                    <Button Grid.Row="5" Grid.Column="1" x:Name="btnAddProduct" Width="80" Content="Add Product" Margin="0,2,0,0"/>
+                    <Button x:Name="btnAddProd" Grid.Row="5" Grid.Column="1" Width="80" Content="Add Product" Margin="0,2,0,0" Click="btnAddProd_Click"/>
                 </Grid>
             </GroupBox>
            

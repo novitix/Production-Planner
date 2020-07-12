@@ -25,7 +25,7 @@ namespace Production_Planner
         public MainWindow()
         {
             InitializeComponent();
-            disp_products.ItemsSource = DatabaseHandler.GetProducts();
+            RefreshProductList();
         }
         private void BtnNext_Click(object sender, RoutedEventArgs e)
         {
@@ -36,6 +36,7 @@ namespace Production_Planner
         {
             var selProd = (Product)disp_products.SelectedItem;
             ProductWindow wnd = new ProductWindow(selProd);
+            wnd.Owner = this;
             wnd.ShowDialog();
         }
 
@@ -57,7 +58,18 @@ namespace Production_Planner
         private void OpenAddWindow()
         {
             AddWindow wnd = new AddWindow();
+            wnd.Owner = this;
             wnd.Show();
+        }
+
+        public void RefreshProductList()
+        {
+            disp_products.ItemsSource = DatabaseHandler.GetAllProducts();
+        }
+
+        private void btnSettings_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

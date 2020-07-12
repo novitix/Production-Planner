@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Production_Planner"
         mc:Ignorable="d"
-        Title="ProductWindow" Height="450" Width="800">
-    <Grid>
+        WindowStartupLocation="CenterOwner"
+        Title="ProductWindow" Height="107.528" Width="336.947">
+    <Grid Margin="5,5,5,5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
@@ -18,12 +19,12 @@
 
         <DockPanel Grid.Row="0" Grid.Column="0">
             <Label Content="Exchange Rate: " DockPanel.Dock="Left"/>
-            <TextBox x:Name="txtExRate" TextChanged="txtExRate_TextChanged"/>
+            <TextBox x:Name="txtExRate" PreviewTextInput="txtExRate_PreviewTextInput"/>
         </DockPanel>
-        <DockPanel Grid.Row="0" Grid.Column="1">
+        <DockPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,0">
             <Label Content="Quantity: " DockPanel.Dock="Left"/>
-            <TextBox x:Name="txtQty" TextChanged="txtQty_TextChanged"/>
+            <TextBox x:Name="txtQty" Text="1" PreviewTextInput="txtQty_PreviewTextInput"/>
         </DockPanel>
-        <Button x:Name="btnGetSs" Grid.Column="0" Grid.Row="1" Click="btnGetSs_Click">Get Spreadsheet</Button>
+        <Button x:Name="btnGetSs" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Click="btnGetSs_Click" Margin="0,5,0,0">Get Spreadsheet</Button>
     </Grid>
 </Window>
