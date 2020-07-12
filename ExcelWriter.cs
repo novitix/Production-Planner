@@ -52,7 +52,7 @@ namespace Production_Planner
             {
                 this.ws.Cells[i + 2, 4].Value2 = parts[i].Name;
                 this.ws.Cells[i + 2, 5].Value2 = parts[i].OrderQty * multiplier;
-                this.ws.Cells[i + 2, 6].Value2 = parts[i].GetTypeName();
+                this.ws.Cells[i + 2, 6].Value2 = DatabaseHandler.GetPartTypeName(parts[i].TypeId);
             }
         }
 

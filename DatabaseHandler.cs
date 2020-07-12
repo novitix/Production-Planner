@@ -105,14 +105,14 @@ namespace Production_Planner
             var cmd = new SqliteCommand(sql, con);
             var reader = cmd.ExecuteReader();
             List<Part> res = new List<Part>();
-
+            var partTypes = GetAllPartTypes();
             while (reader.Read())
             {
-                var part_id = reader.GetInt32(0);
-                var part_name = reader.GetString(1);
-                var part_type = reader.GetInt32(2);
-                res.Add(new Part(part_id, part_name, part_type));
-
+                var partId = reader.GetInt32(0);
+                var partName = reader.GetString(1);
+                var partTypeId = reader.GetInt32(2);
+                var partTypeName = partTypes.Find(s => s.Id == partTypeId).TypeName;
+                res.Add(new Part(partId, partName, partTypeId));
             }
             return res;
         }

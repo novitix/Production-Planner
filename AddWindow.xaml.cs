@@ -71,7 +71,7 @@ namespace Production_Planner
                 int ptQty;
                 if (int.TryParse(txtPtQty.Text, out ptQty))
                 {
-                    prodPtList.Add(new PartQty(selItem.Id, selItem.Name, selItem.Type, ptQty));
+                    prodPtList.Add(new PartQty(selItem.Id, selItem.Name, selItem.TypeId, ptQty));
                 }
                 else
                 {
@@ -111,7 +111,8 @@ namespace Production_Planner
 
         private void btnAddPtType_Click(object sender, RoutedEventArgs e)
         {
-
+            string sqlStr = string.Format(@"INSERT INTO part_type (type_name) VALUES ('{0}')", txtAddPtType.Text);
+            DatabaseHandler.ExecuteSql(sqlStr);
         }
     }
 }

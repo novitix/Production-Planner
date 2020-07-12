@@ -30,32 +30,29 @@ namespace Production_Planner
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int Type { get; set; }
-        private string _typeName;
+        public int TypeId { get; set; }
 
-        public Part(int id, string name, int type)
+        public Part(int id, string name, int typeId)
         {
             Id = id;
             Name = name;
-            Type = type;
+            TypeId = typeId;
         }
 
-        public string GetTypeName()
+        public string TypeName
         {
-            if (string.IsNullOrEmpty(_typeName))
+            get
             {
-                _typeName = DatabaseHandler.GetPartTypeName(this.Id);
+                return DatabaseHandler.GetPartTypeName(TypeId);
             }
-
-            return _typeName;
         }
     }
 
     public class PartQty : Part
     {
         public int OrderQty { get; set; }
-        public PartQty(int id, string name, int type, int orderQty)
-            : base(id, name, type)
+        public PartQty(int id, string name, int typeId, int orderQty)
+            : base(id, name, typeId)
         {
             this.OrderQty = orderQty;
         }

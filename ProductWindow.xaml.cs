@@ -39,7 +39,13 @@ namespace Production_Planner
             ExcelWriter exWrite = new ExcelWriter();
             string name = _IO.Path.GetRandomFileName() + ".xlsx";
             double cost = currentProd.Cost_rmb * int.Parse(txtQty.Text);
+            partsNeeded = SortParts(partsNeeded);
             exWrite.WriteToExcel(partsNeeded, name, int.Parse(txtQty.Text), double.Parse(txtExRate.Text), cost);
+        }
+
+        private List<PartQty> SortParts(List<PartQty> partList)
+        {
+            return partList.OrderBy(o => o.TypeId).ToList();
         }
 
         private void btnGetSs_Click(object sender, RoutedEventArgs e)
