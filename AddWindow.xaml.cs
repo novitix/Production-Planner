@@ -41,24 +41,30 @@ namespace Production_Planner
         public AddWindow()
         {
             InitializeComponent();
-
-            partList = new ObservableCollection<Part>(DatabaseHandler.GetParts());
-
-            cbPartsList.ItemsSource = partList;
+            UpdatePartList();
             lbPartsList.ItemsSource = prodPtList;
 
-            partTypes = new ObservableCollection<PartType>(DatabaseHandler.GetAllPartTypes());
-            cbPartType.ItemsSource = partTypes;
+            UpdatePartTypes();
 
             SetStatus("Ready");
+        }
+
+        private void UpdatePartTypes()
+        {
+            partTypes = new ObservableCollection<PartType>(DatabaseHandler.GetAllPartTypes());
+            cbPartType.ItemsSource = partTypes;
+        }
+
+        private void UpdatePartList()
+        {
+            partList = new ObservableCollection<Part>(DatabaseHandler.GetParts());
+            cbPartsList.ItemsSource = partList;
         }
 
         private void txtPtQty_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = Verifier.HasIllegalChars(false, e);
         }
-
-
 
         private void txtProdCost_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
@@ -77,6 +83,7 @@ namespace Production_Planner
             string sqlStr = string.Format(@"INSERT INTO parts (name, type) VALUES ('{0}', '{1}')", txtPartName.Text, selType);
             DatabaseHandler.ExecuteSql(sqlStr);
 
+            UpdatePartList();
             txtPartName.Clear();
             txtPartName.Focus();
             SetStatus("Part added successfully");
@@ -148,6 +155,7 @@ namespace Production_Planner
             }
             string sqlStr = string.Format(@"INSERT INTO part_type (type_name) VALUES ('{0}')", txtAddPtType.Text);
             DatabaseHandler.ExecuteSql(sqlStr);
+            UpdatePartTypes();
             txtAddPtType.Clear();
             txtAddPtType.Focus();
             SetStatus("Part Type added successfully");

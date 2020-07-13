@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Production_Planner"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
-        Title="ProductWindow" Height="107.528" Width="336.947"
+        Title="Product Details" Height="107.528" Width="336.947"
         FocusManager.FocusedElement="{Binding ElementName=txtQty}">
     <Grid Margin="5,5,5,5">
         <Grid.RowDefinitions>

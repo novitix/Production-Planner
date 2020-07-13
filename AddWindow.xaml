@@ -7,7 +7,7 @@
         xmlns:Controls="clr-namespace:Aviad.WPF.Controls;assembly=Aviad.WPF.Controls" x:Class="Production_Planner.AddWindow"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
-        Title="AddWindow" Height="561.992" Width="400" ResizeMode="NoResize">
+        Title="Add Items" Height="561.992" Width="400" ResizeMode="NoResize">
     <Window.Resources>
         <Storyboard x:Name="sbStatus" x:Key="sb">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="txtStatus">
