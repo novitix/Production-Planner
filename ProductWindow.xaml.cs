@@ -27,21 +27,37 @@ namespace Production_Planner
             InitializeComponent();
             currentProd = selProduct;
             partsNeeded = DatabaseHandler.GetParts(currentProd);
+            txtExRate.Text = Properties.Settings.Default.ExRate.ToString();
+            txtQty.SelectAll();
         }
 
-        private void GetSpreadsheet()
+        private string GetSpreadsheet()
         {
             if (String.IsNullOrEmpty(txtExRate.Text) || string.IsNullOrEmpty(txtQty.Text))
             {
                 MessageBox.Show("Please enter exchange rate and quantity.");
-                return;
+                return string.Empty;
             }
             ExcelWriter exWrite = new ExcelWriter();
-            string name = _IO.Path.GetRandomFileName() + ".xlsx";
             double cost = currentProd.Cost_rmb * int.Parse(txtQty.Text);
             partsNeeded = SortParts(partsNeeded);
-            exWrite.WriteToExcel(partsNeeded, name, int.Parse(txtQty.Text), double.Parse(txtExRate.Text), cost);
+
+            string name = Guid.NewGuid().ToString() + ".xlsx";
+            string path = _IO.Path.GetFullPath(Properties.Settings.Default.SpreadsheetLocation + @"\" + name);
+            exWrite.WriteToExcel(partsNeeded, path, int.Parse(txtQty.Text), double.Parse(txtExRate.Text), cost);
+            return path;
         }
+
+        private void RunAndWait(string path)
+        {
+            var proc = new System.Diagnostics.Process();
+            proc.StartInfo.FileName = "explorer.exe";
+            proc.StartInfo.Arguments = string.Format(@"/select,""{0}""", path);
+            proc.EnableRaisingEvents = true;
+            proc.Start();
+            proc.Close();
+        }
+
 
         private List<PartQty> SortParts(List<PartQty> partList)
         {
@@ -50,7 +66,11 @@ namespace Production_Planner
 
         private void btnGetSs_Click(object sender, RoutedEventArgs e)
         {
-            GetSpreadsheet();
+            var path = GetSpreadsheet();
+            if (path != string.Empty)
+            {
+                RunAndWait(path);
+            }
         }
 
         private void txtExRate_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -61,6 +81,17 @@ namespace Production_Planner
         private void txtQty_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = Verifier.HasIllegalChars(false, e);
+        }
+
+        private void txtExRate_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Properties.Settings.Default.ExRate = decimal.Parse(txtExRate.Text);
+            Properties.Settings.Default.Save();
+        }
+
+        private void txtQty_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }

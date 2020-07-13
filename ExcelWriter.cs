@@ -15,7 +15,7 @@ namespace Production_Planner
         _Application excel = new _Excel.Application();
         Workbook wb;
         Worksheet ws;
-        public void WriteToExcel(List<PartQty> parts, string name, int multiplier, double exRate, double cost)
+        public void WriteToExcel(List<PartQty> parts, string path, int multiplier, double exRate, double cost)
         {
             this.wb = excel.Workbooks.Add(XlWBATemplate.xlWBATWorksheet);
             this.ws = wb.Worksheets[1];
@@ -23,7 +23,7 @@ namespace Production_Planner
             WriteParts(parts, multiplier);
 
             writeCost(parts.Count + 2, exRate, cost);
-            wb.SaveAs(name);
+            wb.SaveAs(path);
             this.wb.Close();
         }
 

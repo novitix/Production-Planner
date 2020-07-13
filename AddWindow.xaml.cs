@@ -14,6 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 using Microsoft.Office.Interop.Excel;
+using Microsoft.Vbe.Interop;
+using System.Windows.Media.Animation;
 
 namespace Production_Planner
 {
@@ -22,6 +24,17 @@ namespace Production_Planner
     /// </summary>
     public partial class AddWindow : System.Windows.Window
     {
+        private string _statusMessage = "Ready";
+        public string StatusMessage {
+            get
+            {
+                return _statusMessage;
+            }
+            set
+            {
+                _statusMessage = (String.IsNullOrEmpty(value)) ? "Ready" : value;
+            }
+        }
         private ObservableCollection<Part> partList;
         private ObservableCollection<PartQty> prodPtList = new ObservableCollection<PartQty>();
         private ObservableCollection<PartType> partTypes;
@@ -36,6 +49,8 @@ namespace Production_Planner
 
             partTypes = new ObservableCollection<PartType>(DatabaseHandler.GetAllPartTypes());
             cbPartType.ItemsSource = partTypes;
+
+            SetStatus("Ready");
         }
 
         private void txtPtQty_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -61,29 +76,33 @@ namespace Production_Planner
             var selType = selItem.Id;
             string sqlStr = string.Format(@"INSERT INTO parts (name, type) VALUES ('{0}', '{1}')", txtPartName.Text, selType);
             DatabaseHandler.ExecuteSql(sqlStr);
+
+            txtPartName.Clear();
+            txtPartName.Focus();
+            SetStatus("Part added successfully");
         }
 
         private void btnPtToProd_Click(object sender, RoutedEventArgs e)
         {
             Part selItem = (Part)cbPartsList.SelectedItem;
-            if (selItem != null)
-            {
-                int ptQty;
-                if (int.TryParse(txtPtQty.Text, out ptQty))
-                {
-                    prodPtList.Add(new PartQty(selItem.Id, selItem.Name, selItem.TypeId, ptQty));
-                }
-                else
-                {
-                    MessageBox.Show("Please enter part quantity.");
-                    return;
-                }
-            }
-            else
+            if (selItem == null)
             {
                 MessageBox.Show("Part not Found!");
+                return;
             }
-            
+
+            int ptQty;
+            if (int.TryParse(txtPtQty.Text, out ptQty) == false)
+            {
+                MessageBox.Show("Please enter part quantity.");
+                return;
+            }
+            prodPtList.Add(new PartQty(selItem.Id, selItem.Name, selItem.TypeId, ptQty));
+
+            cbPartsList.SelectedIndex = -1;
+            txtPtQty.Clear();
+            cbPartsList.Focus();
+            SetStatus("Part added to Product successfully");
         }
 
         private void AddProduct()
@@ -94,10 +113,21 @@ namespace Production_Planner
 
         private void btnAddProd_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(txtProdCost.Text) || string.IsNullOrWhiteSpace(txtProductName.Text))
+            {
+                MessageBox.Show("Please enter Product Name and Product Cost");
+                return;
+            }
             AddProduct();
             Product lastProd = DatabaseHandler.GetLastProduct();
             AddProductParts(lastProd.Id);
+
+            txtProductName.Clear();
+            txtProdCost.Clear();
+            prodPtList.Clear();
+            txtProductName.Focus();
             ((MainWindow)this.Owner).RefreshProductList();
+            SetStatus("Product added successfully");
         }
 
         private void AddProductParts(int productId)
@@ -111,8 +141,27 @@ namespace Production_Planner
 
         private void btnAddPtType_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(txtAddPtType.Text))
+            {
+                MessageBox.Show("Please enter Part Type");
+                return;
+            }
             string sqlStr = string.Format(@"INSERT INTO part_type (type_name) VALUES ('{0}')", txtAddPtType.Text);
             DatabaseHandler.ExecuteSql(sqlStr);
+            txtAddPtType.Clear();
+            txtAddPtType.Focus();
+            SetStatus("Part Type added successfully");
+        }
+
+        private void SetStatus(string status)
+        {
+            txtStatus.Content = status;
+            (this.Resources["sb"] as Storyboard).Begin();
+        }
+
+        private void cbPartType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

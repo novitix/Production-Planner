@@ -69,7 +69,9 @@ namespace Production_Planner
 
         private void btnSettings_Click(object sender, RoutedEventArgs e)
         {
-
+            SettingsWindow wnd = new SettingsWindow();
+            wnd.Owner = this;
+            wnd.ShowDialog();
         }
     }
 }
