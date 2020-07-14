@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="SpreadsheetLocation" Type="System.String" Scope="User">
-      <Value Profile="(Default)">unset</Value>
+      <Value Profile="(Default)">Documents</Value>
     </Setting>
     <Setting Name="ExRate" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1.00</Value>

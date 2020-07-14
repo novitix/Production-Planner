@@ -43,7 +43,10 @@ namespace Production_Planner
             partsNeeded = SortParts(partsNeeded);
 
             string name = Guid.NewGuid().ToString() + ".xlsx";
-            string path = _IO.Path.GetFullPath(Properties.Settings.Default.SpreadsheetLocation + @"\" + name);
+
+            string path = (Properties.Settings.Default.SpreadsheetLocation == "Documents") ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : _IO.Path.GetFullPath(Properties.Settings.Default.SpreadsheetLocation);
+            path = _IO.Path.Combine(path, name);
+
             exWrite.WriteToExcel(partsNeeded, path, int.Parse(txtQty.Text), double.Parse(txtExRate.Text), cost);
             return path;
         }

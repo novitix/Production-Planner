@@ -73,5 +73,10 @@ namespace Production_Planner
             wnd.Owner = this;
             wnd.ShowDialog();
         }
+
+        private void btnChange_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

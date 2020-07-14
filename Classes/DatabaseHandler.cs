@@ -12,6 +12,19 @@ namespace Production_Planner
     class DatabaseHandler
     {
         static private readonly string db_loc = "database.db";
+        private static string GetConString()
+        {
+            return string.Format("Data Source={0}", db_loc);
+        }
+        public static void ExecuteSql(string sqlStr)
+        {
+            string con_str = GetConString();
+            var con = new SqliteConnection(con_str);
+            con.Open();
+            var cmd = new SqliteCommand(sqlStr, con);
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
         public static ObservableCollection<Product> GetAllProducts()
         {
             string con_str = GetConString();
@@ -30,11 +43,6 @@ namespace Production_Planner
 
             con.Close();
             return res;
-        }
-
-        private static string GetConString()
-        {
-            return string.Format("Data Source={0}", db_loc);
         }
 
         private class PartFindRes
@@ -67,7 +75,6 @@ namespace Production_Planner
             }
             con.Close();
 
-
             // found part_ids in partFindList. Now use part id to find part details (e.g. name).
             var partsCon = new SqliteConnection(con_str);
             con.Open();
@@ -95,7 +102,6 @@ namespace Production_Planner
             return res;
         }
 
-
         public static List<Part> GetParts()
         {
             string con_str = GetConString();
@@ -115,17 +121,6 @@ namespace Production_Planner
                 res.Add(new Part(partId, partName, partTypeId));
             }
             return res;
-        }
-
-
-        public static void ExecuteSql(string sqlStr)
-        {
-            string con_str = GetConString();
-            var con = new SqliteConnection(con_str);
-            con.Open();
-            var cmd = new SqliteCommand(sqlStr, con);
-            cmd.ExecuteNonQuery();
-            con.Close();
         }
 
         public static Product GetLastProduct()

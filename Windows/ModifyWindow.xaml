@@ -1,24 +1,11 @@
-﻿<Window
+﻿<Window x:Class="Production_Planner.Windows.ModifyWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Production_Planner"
-        xmlns:Controls="clr-namespace:Aviad.WPF.Controls;assembly=Aviad.WPF.Controls" x:Class="Production_Planner.AddWindow"
+        xmlns:local="clr-namespace:Production_Planner.Windows"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterOwner"
-        Title="Add Items" Height="561.992" Width="400" ResizeMode="NoResize">
-    <Window.Resources>
-        <Storyboard x:Name="sbStatus" x:Key="sb">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="txtStatus">
-                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:3" Value="1"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:3.1" Value="0"/>
-            </DoubleAnimationUsingKeyFrames>
-        </Storyboard>
-    </Window.Resources>
-
+        Title="Modify Items" Height="561.992" Width="400" ResizeMode="NoResize">
     <StackPanel>
         <GroupBox Header="Part Types">
             <DockPanel>

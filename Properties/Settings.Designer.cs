@@ -25,7 +25,7 @@ namespace Production_Planner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("unset")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Documents")]
         public string SpreadsheetLocation {
             get {
                 return ((string)(this["SpreadsheetLocation"]));

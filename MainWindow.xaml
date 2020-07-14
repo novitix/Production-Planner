@@ -9,7 +9,8 @@
         Loaded="Window_Loaded">
     <DockPanel>
         <StackPanel DockPanel.Dock="Right" Margin="10,10,10,10">
-            <Button x:Name="btnAdd" VerticalAlignment="Center" Width="80" Height="60" Click="btnAdd_Click" Margin="0,0,0,10">Add</Button>
+            <Button x:Name="btnAdd" VerticalAlignment="Center" Width="80" Height="60" Click="btnAdd_Click" Margin="0,0,0,10">Add Items</Button>
+            <Button x:Name="btnChange" VerticalAlignment="Center" Width="80" Height="60" Click="btnChange_Click"  Margin="0,0,0,10" Visibility="Collapsed">Modify Items</Button>
             <Button x:Name="btnSettings" VerticalAlignment="Center" Width="80" Height="60" Click="btnSettings_Click">Settings</Button>
         </StackPanel>
         <ListBox x:Name="disp_products" Width="681" Margin="10,10" DockPanel.Dock="Left" Background="#EEE">
