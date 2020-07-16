@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 
 namespace Production_Planner
 {
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -26,6 +27,7 @@ namespace Production_Planner
         {
             InitializeComponent();
             RefreshProductList();
+            SetOrderList();
         }
         private void BtnNext_Click(object sender, RoutedEventArgs e)
         {
@@ -67,6 +69,11 @@ namespace Production_Planner
             disp_products.ItemsSource = DatabaseHandler.GetAllProducts();
         }
 
+        public void SetOrderList()
+        {
+            //lbOrderProds.ItemsSource = test;
+        }
+
         private void btnSettings_Click(object sender, RoutedEventArgs e)
         {
             SettingsWindow wnd = new SettingsWindow();
@@ -78,5 +85,11 @@ namespace Production_Planner
         {
 
         }
+
+        private void txtItemQty_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+             e.Handled = Verifier.HasIllegalChars(false, e);
+        }
     }
+
 }

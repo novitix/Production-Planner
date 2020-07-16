@@ -13,15 +13,53 @@ namespace Production_Planner
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public double Cost_rmb { get; set; }
+        public double CostRmb { get; set; }
 
         public Product() { }
 
-        public Product(int id, string name, double cost_rmb)
+        public Product(int id, string name, double costRmb)
         {
             Id = id;
             Name = name;
-            Cost_rmb = cost_rmb;
+            CostRmb = costRmb;
+        }
+    }
+
+    public class ProductQty : Product, INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+        private int _qty;
+        public int Qty
+        {
+            get
+            {
+                return _qty;
+            }
+            set
+            {
+                _qty = value;
+                OnPropertyChanged("TotalCost");
+            }
+        }
+
+        public double TotalCost { 
+            get
+            { 
+                return Math.Round(Qty * CostRmb, 2);
+            } 
+        }
+
+        public ProductQty(int id, string name, double costRmb, int qty)
+            : base(id, name, costRmb)
+        {
+            Qty = qty;
         }
     }
 

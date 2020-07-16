@@ -39,7 +39,7 @@ namespace Production_Planner
                 return string.Empty;
             }
             ExcelWriter exWrite = new ExcelWriter();
-            double cost = currentProd.Cost_rmb * int.Parse(txtQty.Text);
+            double cost = currentProd.CostRmb * int.Parse(txtQty.Text);
             partsNeeded = SortParts(partsNeeded);
 
             string name = Guid.NewGuid().ToString() + ".xlsx";

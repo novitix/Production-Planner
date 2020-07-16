@@ -16,6 +16,15 @@ namespace Production_Planner
         {
             return string.Format("Data Source={0}", db_loc);
         }
+        public static SqliteDataReader GetReader(string sql)
+        {
+            string con_str = GetConString();
+            var con = new SqliteConnection(con_str);
+            con.Open();
+            var cmd = new SqliteCommand(sql, con);
+            var reader = cmd.ExecuteReader();
+            return reader;
+        }
         public static void ExecuteSql(string sqlStr)
         {
             string con_str = GetConString();
@@ -27,21 +36,15 @@ namespace Production_Planner
         }
         public static ObservableCollection<Product> GetAllProducts()
         {
-            string con_str = GetConString();
             var res = new ObservableCollection<Product>();
-            var con = new SqliteConnection(con_str);
-            con.Open();
-
             string sql = @"SELECT * FROM products";
-            var cmd = new SqliteCommand(sql, con);
-            var reader = cmd.ExecuteReader();
+            var reader = GetReader(sql);
             while (reader.Read())
             {
                 var prod = new Product(reader.GetInt32(0), reader.GetString(1), reader.GetDouble(2));
                 res.Add(prod);
             }
 
-            con.Close();
             return res;
         }
 
@@ -60,32 +63,21 @@ namespace Production_Planner
         public static List<PartQty> GetParts(Product prod)
         {
             int id = prod.Id;
-
-            string con_str = GetConString();
             var partFindList = new List<PartFindRes>();
-            var con = new SqliteConnection(con_str);
-            con.Open();
 
             string sql = string.Format(@"SELECT part_id, qty FROM part_find WHERE product_id='{0}'", id);
-            var cmd = new SqliteCommand(sql, con);
-            var reader = cmd.ExecuteReader();
+            var reader = GetReader(sql);
             while (reader.Read())
             {
                 partFindList.Add(new PartFindRes(reader.GetInt32(0), reader.GetInt32(1)));
             }
-            con.Close();
 
             // found part_ids in partFindList. Now use part id to find part details (e.g. name).
-            var partsCon = new SqliteConnection(con_str);
-            con.Open();
-
             var ids_list = partFindList.Select(o => o.PartId.ToString()).ToArray();
             string concatIds = string.Join(", ", ids_list);
             sql = string.Format(@"SELECT * FROM parts WHERE id IN ({0})", concatIds);
-            cmd = new SqliteCommand(sql, con);
             var res = new List<PartQty>();
-
-            reader = cmd.ExecuteReader();
+            reader = GetReader(sql);
             while (reader.Read())
             {
                 var part_id = reader.GetInt32(0);
@@ -104,14 +96,10 @@ namespace Production_Planner
 
         public static List<Part> GetParts()
         {
-            string con_str = GetConString();
-            var con = new SqliteConnection(con_str);
             string sql = "SELECT * FROM parts";
-            con.Open();
-            var cmd = new SqliteCommand(sql, con);
-            var reader = cmd.ExecuteReader();
             List<Part> res = new List<Part>();
             var partTypes = GetAllPartTypes();
+            var reader = GetReader(sql);
             while (reader.Read())
             {
                 var partId = reader.GetInt32(0);
@@ -125,14 +113,9 @@ namespace Production_Planner
 
         public static Product GetLastProduct()
         {
-            string con_str = GetConString();
-            var con = new SqliteConnection(con_str);
             string sql = "SELECT * FROM products ORDER BY ID DESC LIMIT 1";
-            con.Open();
-            var cmd = new SqliteCommand(sql, con);
-            var reader = cmd.ExecuteReader();
+            var reader = GetReader(sql);
             Product res = new Product();
-
             while (reader.Read())
             {
                 res = new Product(reader.GetInt32(0), reader.GetString(1), reader.GetDouble(2));
@@ -143,33 +126,29 @@ namespace Production_Planner
 
         public static string GetPartTypeName(int id)
         {
-            string con_str = GetConString();
-            var con = new SqliteConnection(con_str);
             string sql = string.Format("SELECT * FROM part_type WHERE id='{0}' LIMIT 1", id);
-            con.Open();
-            var cmd = new SqliteCommand(sql, con);
-            var reader = cmd.ExecuteReader();
+            var reader = GetReader(sql);
             reader.Read();
             string res = reader.GetString(1);
-            con.Close();
             return res;
         }
 
         public static List<PartType> GetAllPartTypes()
         {
-            string con_str = GetConString();
-            var con = new SqliteConnection(con_str);
             string sql = string.Format("SELECT * FROM part_type");
-            con.Open();
-            var cmd = new SqliteCommand(sql, con);
-            var reader = cmd.ExecuteReader();
+            var reader = GetReader(sql);
             var res = new List<PartType>();
             while(reader.Read())
             {
                 res.Add(new PartType(reader.GetInt32(0), reader.GetString(1)));
             }
-            con.Close();
             return res;
         }
+
+        //public static List<ProductQty> GetOrderList()
+        //{
+
+        //}
+
     }
 }
