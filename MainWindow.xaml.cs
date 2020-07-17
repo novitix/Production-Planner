@@ -23,11 +23,12 @@ namespace Production_Planner
     /// </summary>
     public partial class MainWindow : Window
     {
+        ObservableCollection<ProductQty> orderList;
         public MainWindow()
         {
             InitializeComponent();
             RefreshProductList();
-            SetOrderList();
+            RefreshOrderList();
         }
         private void BtnNext_Click(object sender, RoutedEventArgs e)
         {
@@ -49,7 +50,16 @@ namespace Production_Planner
 
         private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            OpenProductWindow();
+            var selItem = disp_products.SelectedItem as Product;
+            if (orderList.Any(o => o.Id == selItem.Id))
+            {
+                orderList.Where(o => o.Id == selItem.Id).First().Qty++;
+            }
+            else
+            {
+                orderList.Add(new ProductQty(selItem, 1));
+            }
+            
         }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
@@ -69,9 +79,10 @@ namespace Production_Planner
             disp_products.ItemsSource = DatabaseHandler.GetAllProducts();
         }
 
-        public void SetOrderList()
+        public void RefreshOrderList()
         {
-            //lbOrderProds.ItemsSource = test;
+            orderList = new ObservableCollection<ProductQty>(DatabaseHandler.GetOrderList());
+            lbOrderProds.ItemsSource = orderList;
         }
 
         private void btnSettings_Click(object sender, RoutedEventArgs e)
@@ -89,6 +100,25 @@ namespace Production_Planner
         private void txtItemQty_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
              e.Handled = Verifier.HasIllegalChars(false, e);
+        }
+
+        private void txtItemQty_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            
+        }
+
+        private void PushOrderList()
+        {
+            foreach (ProductQty orderItem in lbOrderProds.Items)
+            {
+                string sql = string.Format("INSERT OR REPLACE INTO order_list (product_id, qty) VALUES({0}, {1})", orderItem.Id, orderItem.Qty);
+                DatabaseHandler.ExecuteSql(sql);
+            }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            PushOrderList();
         }
     }
 

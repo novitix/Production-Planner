@@ -5,6 +5,7 @@ using System.Linq;
 using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Microsoft.Data.Sqlite;
 
 namespace Production_Planner
@@ -22,7 +23,7 @@ namespace Production_Planner
             var con = new SqliteConnection(con_str);
             con.Open();
             var cmd = new SqliteCommand(sql, con);
-            var reader = cmd.ExecuteReader();
+            var reader = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
             return reader;
         }
         public static void ExecuteSql(string sqlStr)
@@ -115,13 +116,8 @@ namespace Production_Planner
         {
             string sql = "SELECT * FROM products ORDER BY ID DESC LIMIT 1";
             var reader = GetReader(sql);
-            Product res = new Product();
-            while (reader.Read())
-            {
-                res = new Product(reader.GetInt32(0), reader.GetString(1), reader.GetDouble(2));
-            }
-
-            return res;
+            reader.Read();
+            return new Product(reader.GetInt32(0), reader.GetString(1), reader.GetDouble(2));
         }
 
         public static string GetPartTypeName(int id)
@@ -145,10 +141,29 @@ namespace Production_Planner
             return res;
         }
 
-        //public static List<ProductQty> GetOrderList()
-        //{
+        public static Product GetProduct(int id)
+        {
+            string sql = string.Format("SELECT * FROM products WHERE id='{0}' LIMIT 1", id);
+            var reader = GetReader(sql);
+            reader.Read();
+            return new Product(id, reader.GetString(1), reader.GetDouble(2));
+        }
 
-        //}
+        public static List<ProductQty> GetOrderList()
+        {
+            var res = new List<ProductQty>();
+            string sql = string.Format("SELECT * FROM order_list");
+            using (var reader = GetReader(sql))
+            {
+                while (reader.Read())
+                {
+                    int id = reader.GetInt32(0);
+                    Product prod = GetProduct(id);
+                    res.Add(new ProductQty(prod, reader.GetInt32(1)));
+                }
+            }
+            return res;
+        }
 
     }
 }

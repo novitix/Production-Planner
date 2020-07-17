@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Production_Planner"
         mc:Ignorable="d"
         Title="Production Planner" Height="450" Width="800"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded" Closing="Window_Closing">
     <DockPanel>
         <StackPanel DockPanel.Dock="Right" Margin="10,10,10,10">
             <Button x:Name="btnAdd" VerticalAlignment="Center" Width="80" Height="60" Click="btnAdd_Click" Margin="0,0,0,10">Add Items</Button>
@@ -36,7 +36,7 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <DockPanel>
-                        <TextBox x:Name="txtItemQty" Width="50" DockPanel.Dock="Right" Text="{Binding Path=Qty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="txtItemQty_PreviewTextInput"/>
+                        <TextBox x:Name="txtItemQty" Width="50" DockPanel.Dock="Right" Text="{Binding Path=Qty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}" PreviewTextInput="txtItemQty_PreviewTextInput" TextChanged="txtItemQty_TextChanged"/>
                         <TextBlock>
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="{}{0} - ({1} RMB)">

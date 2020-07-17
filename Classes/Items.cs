@@ -46,6 +46,7 @@ namespace Production_Planner
             {
                 _qty = value;
                 OnPropertyChanged("TotalCost");
+                OnPropertyChanged("Qty");
             }
         }
 
@@ -59,6 +60,14 @@ namespace Production_Planner
         public ProductQty(int id, string name, double costRmb, int qty)
             : base(id, name, costRmb)
         {
+            Qty = qty;
+        }
+
+        public ProductQty(Product prod, int qty)
+        {
+            Id = prod.Id;
+            Name = prod.Name;
+            CostRmb = prod.CostRmb;
             Qty = qty;
         }
     }
