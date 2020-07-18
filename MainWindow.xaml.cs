@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using _Forms = System.Windows.Forms;
 using _IO = System.IO;
 
 namespace Production_Planner
@@ -82,19 +83,9 @@ namespace Production_Planner
             wnd.ShowDialog();
         }
 
-        private void btnChange_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void txtItemQty_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
              e.Handled = Verifier.HasIllegalChars(false, e);
-        }
-
-        private void txtItemQty_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            
         }
 
         private void PushOrderList()
@@ -123,16 +114,30 @@ namespace Production_Planner
                 return string.Empty;
             }
             ExcelWriter exWrite = new ExcelWriter();
-            string name = Guid.NewGuid().ToString() + ".xlsx";
+            string path = GetSaveLocation();
+            if (string.IsNullOrEmpty(path)) return null;
 
-            string path = (Properties.Settings.Default.SpreadsheetLocation == "Documents") ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : _IO.Path.GetFullPath(Properties.Settings.Default.SpreadsheetLocation);
-            path = _IO.Path.Combine(path, name);
+            //string path = (Properties.Settings.Default.SpreadsheetLocation == "Documents") ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : _IO.Path.GetFullPath(Properties.Settings.Default.SpreadsheetLocation);
+            //path = _IO.Path.Combine(path, name);
 
             exWrite.WriteToExcel(new List<ProductQty>(orderList), path, double.Parse(txtExRate.Text), GetCost());
             return path;
         }
 
-        
+        private string GetSaveLocation()
+        {
+            var sfd = new _Forms.SaveFileDialog();
+            sfd.InitialDirectory = Properties.Settings.Default.SpreadsheetLocation;
+            sfd.DefaultExt = "xlsx";
+            sfd.Filter = "Excel Workbook ( *.xlsx)|*.xlsx";
+            sfd.RestoreDirectory = true;
+            sfd.CheckPathExists = true;
+            if (sfd.ShowDialog() == _Forms.DialogResult.OK)
+            {
+                return sfd.FileName;
+            }
+            return null;
+        }
 
         private double GetCost()
         {
@@ -168,16 +173,12 @@ namespace Production_Planner
 
         private void btnGetSs_Click_1(object sender, RoutedEventArgs e)
         {
+            if (orderList.Count == 0) return;
             var path = GetSpreadsheet();
-            if (path != string.Empty)
+            if (!string.IsNullOrEmpty(path))
             {
                 RunAndWait(path);
             }
-        }
-
-        private void txtItemQty_KeyDown(object sender, KeyEventArgs e)
-        {
-            
         }
 
         private void lbOrderProds_KeyDown(object sender, KeyEventArgs e)
@@ -195,6 +196,16 @@ namespace Production_Planner
         private void txtItemQty_LostFocus(object sender, RoutedEventArgs e)
         {
             IsQtyBoxFocused = false;
+        }
+
+        private void btnClearOrder_Click(object sender, RoutedEventArgs e)
+        {
+            orderList.Clear();
+        }
+
+        private void btnChange_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 
