@@ -8,11 +8,18 @@
         Title="Production Planner" Height="450" Width="800"
         Loaded="Window_Loaded" Closing="Window_Closing">
     <DockPanel>
-        <StackPanel DockPanel.Dock="Right" Margin="10,10,10,10">
-            <Button x:Name="btnAdd" VerticalAlignment="Center" Width="80" Height="60" Click="btnAdd_Click" Margin="0,0,0,10">Add Items</Button>
-            <Button x:Name="btnChange" VerticalAlignment="Center" Width="80" Height="60" Click="btnChange_Click"  Margin="0,0,0,10" Visibility="Collapsed">Modify Items</Button>
-            <Button x:Name="btnSettings" VerticalAlignment="Center" Width="80" Height="60" Click="btnSettings_Click">Settings</Button>
-        </StackPanel>
+        <DockPanel DockPanel.Dock="Right" Margin="10,10,10,10">
+            <StackPanel DockPanel.Dock="Bottom">
+                <Button x:Name="btnAdd" VerticalAlignment="Center" Width="80" Height="60" Click="btnAdd_Click" Margin="0,0,0,10">Add Items</Button>
+                <Button x:Name="btnChange" VerticalAlignment="Center" Width="80" Height="60" Click="btnChange_Click"  Margin="0,0,0,10" Visibility="Collapsed">Modify Items</Button>
+                <Button x:Name="btnSettings" VerticalAlignment="Center" Width="80" Height="60" Click="btnSettings_Click">Settings</Button>
+            </StackPanel>
+            <StackPanel>
+                <Label FontWeight="DemiBold" Content="Exchange Rate" Padding="0,0,0,5"/>
+                <TextBox x:Name="txtExRate" PreviewTextInput="txtExRate_PreviewTextInput" TextChanged="txtExRate_TextChanged"  Width="79"/>
+                <Button x:Name="btnGetSs" Width="80" Height="60" Click="btnGetSs_Click_1"  Margin="0,5,0,0" IsDefault="True">Get Order</Button>
+            </StackPanel>
+        </DockPanel>
         <ListBox x:Name="disp_products" Width="200" Margin="10,10" DockPanel.Dock="Left" Background="#EEE">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -49,5 +56,6 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        
     </DockPanel>
 </Window>

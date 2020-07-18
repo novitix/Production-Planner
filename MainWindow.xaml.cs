@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using _IO = System.IO;
 
 namespace Production_Planner
 {
@@ -29,7 +30,9 @@ namespace Production_Planner
             InitializeComponent();
             RefreshProductList();
             RefreshOrderList();
+            txtExRate.Text = Properties.Settings.Default.ExRate.ToString();
         }
+
         private void BtnNext_Click(object sender, RoutedEventArgs e)
         {
             OpenProductWindow();
@@ -119,6 +122,66 @@ namespace Production_Planner
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             PushOrderList();
+        }
+
+        private string GetSpreadsheet()
+        {
+            if (String.IsNullOrEmpty(txtExRate.Text))
+            {
+                MessageBox.Show("Please enter exchange rate and quantity.");
+                return string.Empty;
+            }
+            ExcelWriter exWrite = new ExcelWriter();
+            string name = Guid.NewGuid().ToString() + ".xlsx";
+
+            string path = (Properties.Settings.Default.SpreadsheetLocation == "Documents") ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : _IO.Path.GetFullPath(Properties.Settings.Default.SpreadsheetLocation);
+            path = _IO.Path.Combine(path, name);
+
+            exWrite.WriteToExcel(new List<ProductQty>(orderList), path, double.Parse(txtExRate.Text), GetCost());
+            return path;
+        }
+
+        
+
+        private double GetCost()
+        {
+            double sum = 0.0;
+            foreach(var item in orderList)
+            {
+                sum += item.CostRmb * item.Qty;
+            }
+
+            return sum;
+        }
+
+        private void RunAndWait(string path)
+        {
+            var proc = new System.Diagnostics.Process();
+            proc.StartInfo.FileName = "explorer.exe";
+            proc.StartInfo.Arguments = string.Format(@"/select,""{0}""", path);
+            proc.EnableRaisingEvents = true;
+            proc.Start();
+            proc.Close();
+        }
+
+        private void txtExRate_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = Verifier.HasIllegalChars(true, e);
+        }
+
+        private void txtExRate_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Properties.Settings.Default.ExRate = decimal.Parse(txtExRate.Text);
+            Properties.Settings.Default.Save();
+        }
+
+        private void btnGetSs_Click_1(object sender, RoutedEventArgs e)
+        {
+            var path = GetSpreadsheet();
+            if (path != string.Empty)
+            {
+                RunAndWait(path);
+            }
         }
     }
 

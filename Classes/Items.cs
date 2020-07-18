@@ -30,10 +30,7 @@ namespace Production_Planner
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         private int _qty;
         public int Qty
@@ -86,6 +83,8 @@ namespace Production_Planner
             TypeId = typeId;
         }
 
+        public Part() { }
+
         public string TypeName
         {
             get
@@ -101,6 +100,14 @@ namespace Production_Planner
         public PartQty(int id, string name, int typeId, int orderQty)
             : base(id, name, typeId)
         {
+            this.OrderQty = orderQty;
+        }
+
+        public PartQty(Part part, int orderQty)
+        {
+            this.Id = part.Id;
+            this.Name = part.Name;
+            this.TypeId = part.TypeId;
             this.OrderQty = orderQty;
         }
     }
