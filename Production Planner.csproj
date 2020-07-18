@@ -195,10 +195,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\ProductWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Windows\SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -207,9 +203,6 @@
   <ItemGroup>
     <Compile Include="Windows\PageProductSel.xaml.cs">
       <DependentUpon>PageProductSel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\ProductWindow.xaml.cs">
-      <DependentUpon>ProductWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

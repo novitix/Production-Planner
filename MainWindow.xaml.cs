@@ -33,19 +33,6 @@ namespace Production_Planner
             txtExRate.Text = Properties.Settings.Default.ExRate.ToString();
         }
 
-        private void BtnNext_Click(object sender, RoutedEventArgs e)
-        {
-            OpenProductWindow();
-        }
-
-        private void OpenProductWindow()
-        {
-            var selProd = (Product)disp_products.SelectedItem;
-            ProductWindow wnd = new ProductWindow(selProd);
-            wnd.Owner = this;
-            wnd.ShowDialog();
-        }
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
 
@@ -112,10 +99,14 @@ namespace Production_Planner
 
         private void PushOrderList()
         {
+            // clear db order list first
+            string delSql = "DELETE FROM order_list";
+            DatabaseHandler.ExecuteSql(delSql);
+
             foreach (ProductQty orderItem in lbOrderProds.Items)
             {
-                string sql = string.Format("INSERT OR REPLACE INTO order_list (product_id, qty) VALUES({0}, {1})", orderItem.Id, orderItem.Qty);
-                DatabaseHandler.ExecuteSql(sql);
+                string insSql = string.Format("INSERT INTO order_list (product_id, qty) VALUES({0}, {1})", orderItem.Id, orderItem.Qty);
+                DatabaseHandler.ExecuteSql(insSql);
             }
         }
 
@@ -182,6 +173,28 @@ namespace Production_Planner
             {
                 RunAndWait(path);
             }
+        }
+
+        private void txtItemQty_KeyDown(object sender, KeyEventArgs e)
+        {
+            
+        }
+
+        private void lbOrderProds_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (IsQtyBoxFocused || e.Key != Key.Delete || lbOrderProds.SelectedIndex == -1) return;
+            orderList.RemoveAt(lbOrderProds.SelectedIndex);
+        }
+
+        bool IsQtyBoxFocused = false;
+        private void txtItemQty_GotFocus(object sender, RoutedEventArgs e)
+        {
+            IsQtyBoxFocused = true;
+        }
+
+        private void txtItemQty_LostFocus(object sender, RoutedEventArgs e)
+        {
+            IsQtyBoxFocused = false;
         }
     }
 
