@@ -35,6 +35,14 @@ namespace Production_Planner
             cmd.ExecuteNonQuery();
             con.Close();
         }
+
+        public static void ExecuteSql(List<string> sqlStr)
+        {
+            foreach (string sql in sqlStr)
+            {
+                ExecuteSql(sql);
+            }
+        }
         public static ObservableCollection<Product> GetAllProducts()
         {
             var res = new ObservableCollection<Product>();

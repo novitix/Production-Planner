@@ -12,7 +12,9 @@
             <StackPanel DockPanel.Dock="Bottom">
                 <Button x:Name="btnClearOrder" VerticalAlignment="Center" Width="80" Height="60" Click="btnClearOrder_Click"  Margin="0,0,0,10">Clear Order</Button>
                 <Button x:Name="btnAdd" VerticalAlignment="Center" Width="80" Height="60" Click="btnAdd_Click" Margin="0,0,0,10">Add Items</Button>
-                <Button x:Name="btnChange" VerticalAlignment="Center" Width="80" Height="60" Click="btnChange_Click"  Margin="0,0,0,10" Visibility="Collapsed">Modify Items</Button>
+                <Button x:Name="btnChange" VerticalAlignment="Center" Width="80" Height="60" Click="btnChange_Click"  Margin="0,0,0,10">
+                    <TextBlock TextWrapping="Wrap" TextAlignment="Center">Edit/Delete Items</TextBlock>
+                </Button>
                 <Button x:Name="btnSettings" VerticalAlignment="Center" Width="80" Height="60" Click="btnSettings_Click">Settings</Button>
             </StackPanel>
             <StackPanel>
@@ -57,6 +59,5 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        
     </DockPanel>
 </Window>

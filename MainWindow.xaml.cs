@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
+using Production_Planner.Windows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -132,6 +133,7 @@ namespace Production_Planner
             sfd.Filter = "Excel Workbook ( *.xlsx)|*.xlsx";
             sfd.RestoreDirectory = true;
             sfd.CheckPathExists = true;
+            sfd.FileName = Guid.NewGuid().ToString();
             if (sfd.ShowDialog() == _Forms.DialogResult.OK)
             {
                 return sfd.FileName;
@@ -173,7 +175,11 @@ namespace Production_Planner
 
         private void btnGetSs_Click_1(object sender, RoutedEventArgs e)
         {
-            if (orderList.Count == 0) return;
+            if (orderList.Count == 0)
+            {
+                MessageBox.Show("Order list is empty!");
+                return;
+            }
             var path = GetSpreadsheet();
             if (!string.IsNullOrEmpty(path))
             {
@@ -205,7 +211,9 @@ namespace Production_Planner
 
         private void btnChange_Click(object sender, RoutedEventArgs e)
         {
-
+            ChangeWindow wnd = new ChangeWindow();
+            wnd.Owner = this;
+            wnd.ShowDialog();
         }
     }
 

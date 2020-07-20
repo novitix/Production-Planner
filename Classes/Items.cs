@@ -9,10 +9,22 @@ using System.Threading.Tasks;
 namespace Production_Planner
 {
 
-    public class Product
+    public class Product : INotifyPropertyChanged
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        private string _name;
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                _name = value;
+                OnPropertyChanged("Name");
+            }
+        }
         public double CostRmb { get; set; }
 
         public Product() { }
@@ -23,15 +35,17 @@ namespace Production_Planner
             Name = name;
             CostRmb = costRmb;
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
     public class ProductQty : Product, INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        
         private int _qty;
         public int Qty
         {
@@ -70,10 +84,21 @@ namespace Production_Planner
     }
 
 
-    public class Part
+    public class Part : INotifyPropertyChanged
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        private string _name;
+        public string Name {
+        get
+            {
+                return _name;
+            }
+         set
+            {
+                _name = value;
+                OnPropertyChanged("Name");
+            }
+        }
         public int TypeId { get; set; }
 
         public Part(int id, string name, int typeId)
@@ -92,11 +117,28 @@ namespace Production_Planner
                 return DatabaseHandler.GetPartTypeName(TypeId);
             }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
     public class PartQty : Part
     {
-        public int OrderQty { get; set; }
+        private int _orderQty;
+        public int OrderQty { 
+            get
+            {
+                return _orderQty;
+            }
+            set
+            {
+                _orderQty = value;
+                OnPropertyChanged("OrderQty");
+            }
+        }
         public PartQty(int id, string name, int typeId, int orderQty)
             : base(id, name, typeId)
         {
