@@ -106,6 +106,7 @@ namespace Production_Planner
             Id = id;
             Name = name;
             TypeId = typeId;
+            PartType = new PartType(TypeId, DBHandler.GetPartTypeName(typeId));
         }
 
         public Part() { }
@@ -114,7 +115,21 @@ namespace Production_Planner
         {
             get
             {
-                return DatabaseHandler.GetPartTypeName(TypeId);
+                return DBHandler.GetPartTypeName(TypeId);
+            }
+        }
+
+        private PartType _partType;
+        public PartType PartType
+        {
+            get
+            {
+                return _partType;
+            }
+            set
+            {
+                _partType = value;
+                OnPropertyChanged("PartType");
             }
         }
 
@@ -163,6 +178,14 @@ namespace Production_Planner
         {
             Id = id;
             TypeName = typeName;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || !(obj is PartType))
+                return false;
+
+            return ((PartType)obj).Id == this.Id;
         }
     }
 }

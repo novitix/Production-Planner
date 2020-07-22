@@ -10,7 +10,7 @@ using Microsoft.Data.Sqlite;
 
 namespace Production_Planner
 {
-    class DatabaseHandler
+    class DBHandler
     {
         static private readonly string db_loc = "database.db";
         private static string GetConString()
@@ -26,7 +26,7 @@ namespace Production_Planner
             var reader = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
             return reader;
         }
-        public static void ExecuteSql(string sqlStr)
+        public static void ExSql(string sqlStr)
         {
             string con_str = GetConString();
             var con = new SqliteConnection(con_str);
@@ -36,11 +36,11 @@ namespace Production_Planner
             con.Close();
         }
 
-        public static void ExecuteSql(List<string> sqlStr)
+        public static void ExSql(List<string> sqlStr)
         {
             foreach (string sql in sqlStr)
             {
-                ExecuteSql(sql);
+                ExSql(sql);
             }
         }
         public static ObservableCollection<Product> GetAllProducts()

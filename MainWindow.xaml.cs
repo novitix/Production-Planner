@@ -68,12 +68,12 @@ namespace Production_Planner
 
         public void RefreshProductList()
         {
-            disp_products.ItemsSource = DatabaseHandler.GetAllProducts();
+            disp_products.ItemsSource = DBHandler.GetAllProducts();
         }
 
         public void RefreshOrderList()
         {
-            orderList = new ObservableCollection<ProductQty>(DatabaseHandler.GetOrderList());
+            orderList = new ObservableCollection<ProductQty>(DBHandler.GetOrderList());
             lbOrderProds.ItemsSource = orderList;
         }
 
@@ -93,12 +93,12 @@ namespace Production_Planner
         {
             // clear db order list first
             string delSql = "DELETE FROM order_list";
-            DatabaseHandler.ExecuteSql(delSql);
+            DBHandler.ExSql(delSql);
 
             foreach (ProductQty orderItem in lbOrderProds.Items)
             {
                 string insSql = string.Format("INSERT INTO order_list (product_id, qty) VALUES({0}, {1})", orderItem.Id, orderItem.Qty);
-                DatabaseHandler.ExecuteSql(insSql);
+                DBHandler.ExSql(insSql);
             }
         }
 

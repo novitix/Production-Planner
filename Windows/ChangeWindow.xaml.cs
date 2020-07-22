@@ -28,6 +28,12 @@ namespace Production_Planner.Windows
             UpdatePartTypeList();
         }
 
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            PushProductsToDb();
+            PushPartTypesToDb();
+        }
+
         #region ProductTab
         private ObservableCollection<Part> partList;
         private ObservableCollection<Product> prodList;
@@ -35,21 +41,21 @@ namespace Production_Planner.Windows
         
         private void UpdatePartList()
         {
-            partList = new ObservableCollection<Part>(DatabaseHandler.GetParts());
+            partList = new ObservableCollection<Part>(DBHandler.GetParts());
             cbPartsList.ItemsSource = partList;
             cbModPartList.ItemsSource = partList;
         }
 
         private void UpdateProdsList()
         {
-            prodList = new ObservableCollection<Product>(DatabaseHandler.GetAllProducts());
+            prodList = new ObservableCollection<Product>(DBHandler.GetAllProducts());
             cbProdList.ItemsSource = prodList;
         }
 
         private void UpdateProdPtList()
         {
             if (cbProdList.SelectedItem == null) return;
-            prodPtList = new ObservableCollection<PartQty>(DatabaseHandler.GetParts(cbProdList.SelectedItem as Product));
+            prodPtList = new ObservableCollection<PartQty>(DBHandler.GetParts(cbProdList.SelectedItem as Product));
             lbPartsList.ItemsSource = prodPtList;
         }
 
@@ -100,7 +106,7 @@ namespace Production_Planner.Windows
             foreach (var item in prodList)
             {
                 sql = string.Format("UPDATE products SET name='{0}', cost_rmb='{1}' WHERE id={2}", item.Name, item.CostRmb, item.Id);
-                DatabaseHandler.ExecuteSql(sql);
+                DBHandler.ExSql(sql);
             }
             
         }
@@ -108,13 +114,13 @@ namespace Production_Planner.Windows
         private void PushProdPtsToDb(Product prod, List<PartQty> parts)
         {
             // clear product parts first
-            DatabaseHandler.ExecuteSql(string.Format("DELETE FROM part_find WHERE product_id={0}", prod.Id));
+            DBHandler.ExSql(string.Format("DELETE FROM part_find WHERE product_id={0}", prod.Id));
 
             // re-add updated product's parts
             foreach (PartQty part in parts)
             {
                 string sql = string.Format("INSERT INTO part_find (product_id, part_id, qty) VALUES({0}, {1}, {2})", prod.Id, part.Id, part.OrderQty);
-                DatabaseHandler.ExecuteSql(sql);
+                DBHandler.ExSql(sql);
             }
         }
 
@@ -127,11 +133,6 @@ namespace Production_Planner.Windows
             }
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            PushProductsToDb();
-        }
-
         private void btnDelProd_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Are you sure you want to delete this product?", "Confirm Delete", MessageBoxButton.YesNo) != MessageBoxResult.Yes) return;
@@ -140,7 +141,7 @@ namespace Production_Planner.Windows
             sql.Add(string.Format("DELETE FROM products WHERE id={0}", prodId));
             sql.Add(string.Format("DELETE FROM part_find WHERE product_id={0}", prodId));
             sql.Add(string.Format("DELETE FROM order_list WHERE product_id={0}", prodId));
-            DatabaseHandler.ExecuteSql(sql);
+            DBHandler.ExSql(sql);
 
             cbProdList.SelectedIndex = -1;
             UpdateProdsList();
@@ -151,8 +152,31 @@ namespace Production_Planner.Windows
         private ObservableCollection<PartType> partTypeList;
         private void UpdatePartTypeList()
         {
-            partTypeList = new ObservableCollection<PartType>(DatabaseHandler.GetAllPartTypes());
+            partTypeList = new ObservableCollection<PartType>(DBHandler.GetAllPartTypes());
             cbPartType.ItemsSource = partTypeList;
+            cbModPartTypeList.ItemsSource = partTypeList;
+        }
+
+        private void cbModPartList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cbPartType.SelectedIndex == -1) return;
+            cbPartType.Text = "test";//(cbModPartList.SelectedItem as Part).PartType.TypeName;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        #endregion
+
+        #region PartTypeTab
+        private void PushPartTypesToDb()
+        {
+            foreach (PartType item in partTypeList)
+            {
+                string sql = string.Format("UPDATE part_type SET type_name='{0}' WHERE id={1}", item.TypeName, item.Id);
+                DBHandler.ExSql(sql);
+            }
         }
         #endregion
     }

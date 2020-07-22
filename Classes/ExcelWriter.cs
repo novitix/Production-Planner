@@ -109,7 +109,7 @@ namespace Production_Planner
             {
                 this.ws.Cells[i + startingRow, 4].Value2 = parts[i].Name;
                 this.ws.Cells[i + startingRow, 5].Value2 = parts[i].OrderQty;
-                this.ws.Cells[i + startingRow, 6].Value2 = DatabaseHandler.GetPartTypeName(parts[i].TypeId);
+                this.ws.Cells[i + startingRow, 6].Value2 = DBHandler.GetPartTypeName(parts[i].TypeId);
             }
 
             Range c1 = ws.Cells[startingRow, 1];
@@ -136,7 +136,7 @@ namespace Production_Planner
             var parts = new List<PartQty>();
             foreach (ProductQty prod in orderList)
             {
-                var prodParts = DatabaseHandler.GetParts(prod);
+                var prodParts = DBHandler.GetParts(prod);
                 foreach (var part in prodParts)
                 {
                     if (parts.Any(o => o.Id == part.Id))

@@ -51,13 +51,13 @@ namespace Production_Planner
 
         private void UpdatePartTypes()
         {
-            partTypes = new ObservableCollection<PartType>(DatabaseHandler.GetAllPartTypes());
+            partTypes = new ObservableCollection<PartType>(DBHandler.GetAllPartTypes());
             cbPartType.ItemsSource = partTypes;
         }
 
         private void UpdatePartList()
         {
-            partList = new ObservableCollection<Part>(DatabaseHandler.GetParts());
+            partList = new ObservableCollection<Part>(DBHandler.GetParts());
             cbPartsList.ItemsSource = partList;
         }
 
@@ -81,7 +81,7 @@ namespace Production_Planner
             PartType selItem = (PartType)cbPartType.SelectedItem;
             var selType = selItem.Id;
             string sqlStr = string.Format(@"INSERT INTO parts (name, type) VALUES ('{0}', '{1}')", txtPartName.Text, selType);
-            DatabaseHandler.ExecuteSql(sqlStr);
+            DBHandler.ExSql(sqlStr);
 
             UpdatePartList();
             txtPartName.Clear();
@@ -115,7 +115,7 @@ namespace Production_Planner
         private void AddProduct()
         {
             string sqlStr = string.Format(@"INSERT INTO products (name, cost_rmb) VALUES ('{0}', '{1}')", txtProductName.Text, txtProdCost.Text);
-            DatabaseHandler.ExecuteSql(sqlStr);
+            DBHandler.ExSql(sqlStr);
         }
 
         private void btnAddProd_Click(object sender, RoutedEventArgs e)
@@ -126,7 +126,7 @@ namespace Production_Planner
                 return;
             }
             AddProduct();
-            Product lastProd = DatabaseHandler.GetLastProduct();
+            Product lastProd = DBHandler.GetLastProduct();
             AddProductParts(lastProd.Id);
 
             txtProductName.Clear();
@@ -142,7 +142,7 @@ namespace Production_Planner
             foreach (PartQty part in prodPtList)
             {
                 string sqlStr = string.Format(@"INSERT INTO part_find (product_id, part_id, qty) VALUES ('{0}', '{1}', '{2}')", productId, part.Id, part.OrderQty);
-                DatabaseHandler.ExecuteSql(sqlStr);
+                DBHandler.ExSql(sqlStr);
             }
         }
 
@@ -154,7 +154,7 @@ namespace Production_Planner
                 return;
             }
             string sqlStr = string.Format(@"INSERT INTO part_type (type_name) VALUES ('{0}')", txtAddPtType.Text);
-            DatabaseHandler.ExecuteSql(sqlStr);
+            DBHandler.ExSql(sqlStr);
             UpdatePartTypes();
             txtAddPtType.Clear();
             txtAddPtType.Focus();

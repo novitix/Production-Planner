@@ -187,7 +187,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Classes\DatabaseHandler.cs" />
+    <Compile Include="Classes\DBHandler.cs" />
     <Compile Include="Classes\ExcelWriter.cs" />
     <Compile Include="Classes\Items.cs" />
     <Compile Include="MainWindow.xaml.cs">
