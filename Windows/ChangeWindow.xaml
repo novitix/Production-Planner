@@ -86,6 +86,7 @@
                 </StackPanel>
             </TabItem>
 
+            
             <TabItem Header="Modify Parts">
                 <Grid DataContext="{Binding ElementName=cbModPartList, Path=SelectedItem}">
                     <Grid.ColumnDefinitions>

@@ -165,7 +165,7 @@ namespace Production_Planner.Windows
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
+            var items = partList;
         }
         #endregion
 

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Data.Sqlite;
+using _IO = System.IO;
 
 namespace Production_Planner
 {
@@ -26,7 +27,7 @@ namespace Production_Planner
             var reader = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
             return reader;
         }
-        public static void ExSql(string sqlStr)
+        public static void ExSql(string sqlStr, bool updateBackUps = true)
         {
             string con_str = GetConString();
             var con = new SqliteConnection(con_str);
@@ -34,14 +35,18 @@ namespace Production_Planner
             var cmd = new SqliteCommand(sqlStr, con);
             cmd.ExecuteNonQuery();
             con.Close();
+
+            if (updateBackUps) UpdateBackups();
         }
 
         public static void ExSql(List<string> sqlStr)
         {
             foreach (string sql in sqlStr)
             {
-                ExSql(sql);
+                ExSql(sql, false);
             }
+
+            UpdateBackups();
         }
         public static ObservableCollection<Product> GetAllProducts()
         {
@@ -171,6 +176,46 @@ namespace Production_Planner
                 }
             }
             return res;
+        }
+
+        public static void UpdateBackups()
+        {
+            
+
+            string tempPath = _IO.Path.GetTempPath();
+            string savePath = _IO.Path.Combine(tempPath, "ProdPlannerDBBackups");
+            _IO.Directory.CreateDirectory(savePath);
+            string fileName = Guid.NewGuid().ToString() + ".db";
+            string saveFilePath = _IO.Path.Combine(savePath, fileName);
+
+            // don't create backup if the db has been modified in the last 5 minutes
+            string[] backupFiles = _IO.Directory.GetFiles(savePath);
+            bool createBackup = true;
+            foreach (string backupFile in backupFiles)
+            {
+                _IO.FileInfo fi = new _IO.FileInfo(backupFile);
+                if (fi.CreationTime > DateTime.Now.AddMinutes(-5))
+                {
+                    createBackup = false;
+                    break;
+                }
+            }
+            if (!createBackup) return;
+
+            //create backup
+            _IO.File.Copy(db_loc, saveFilePath);
+
+            // remove old backups
+            backupFiles = _IO.Directory.GetFiles(savePath);
+            foreach (string backupFile in backupFiles)
+            {
+                _IO.FileInfo fi = new _IO.FileInfo(backupFile);
+                
+                if (fi.CreationTime < DateTime.Now.AddDays(-30)) //remove files with creation lime longer than 30 days ago
+                {
+                    fi.Delete();
+                }
+            }
         }
 
     }
