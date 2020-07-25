@@ -31,6 +31,7 @@ namespace Production_Planner.Windows
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             PushProductsToDb();
+            PushPartsToDb();
             PushPartTypesToDb();
         }
 
@@ -160,12 +161,21 @@ namespace Production_Planner.Windows
         private void cbModPartList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (cbPartType.SelectedIndex == -1) return;
-            cbPartType.Text = "test";//(cbModPartList.SelectedItem as Part).PartType.TypeName;
+            (cbModPartList.SelectedItem as Part).PartType.InvokeIdChanged();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var items = partList;
+            
+        }
+        private void PushPartsToDb()
+        {
+            string sql;
+            foreach (Part item in partList)
+            {
+                sql = string.Format("UPDATE parts SET name='{0}', type={1} WHERE id={2}", item.Name, item.PartType.Id, item.Id);
+                DBHandler.ExSql(sql);
+            }
         }
         #endregion
 

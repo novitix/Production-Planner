@@ -160,8 +160,19 @@ namespace Production_Planner
         }
     }
 
-    public class PartType
+    public class PartType : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void InvokeIdChanged()
+        {
+            OnPropertyChanged("Id");
+        }
+
         private int _id;
         public int Id {
             get
@@ -171,10 +182,23 @@ namespace Production_Planner
             set
             {
                 _id = value;
+                OnPropertyChanged("Id");
                 TypeName = DBHandler.GetPartTypeName(_id);
             }
         }
-        public string TypeName { get; set; }
+
+        private string _typeName;
+        public string TypeName {
+        get
+            {
+                return _typeName;
+            }
+        set
+            {
+                _typeName = value;
+                OnPropertyChanged("TypeName");
+            }
+        }
 
         public PartType(int id, string typeName)
         {
@@ -188,12 +212,5 @@ namespace Production_Planner
             TypeName = DBHandler.GetPartTypeName(id);
         }
 
-        public override bool Equals(object obj)
-        {
-            if (obj == null || !(obj is PartType))
-                return false;
-
-            return ((PartType)obj).Id == this.Id;
-        }
     }
 }
