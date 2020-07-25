@@ -99,25 +99,16 @@ namespace Production_Planner
                 OnPropertyChanged("Name");
             }
         }
-        public int TypeId { get; set; }
 
-        public Part(int id, string name, int typeId)
+        public Part(int id, string name, PartType partType)
         {
             Id = id;
             Name = name;
-            TypeId = typeId;
-            PartType = new PartType(TypeId, DBHandler.GetPartTypeName(typeId));
+            this.PartType = partType;
+            PartType = partType;
         }
 
         public Part() { }
-
-        public string TypeName
-        {
-            get
-            {
-                return DBHandler.GetPartTypeName(TypeId);
-            }
-        }
 
         private PartType _partType;
         public PartType PartType
@@ -154,8 +145,8 @@ namespace Production_Planner
                 OnPropertyChanged("OrderQty");
             }
         }
-        public PartQty(int id, string name, int typeId, int orderQty)
-            : base(id, name, typeId)
+        public PartQty(int id, string name, PartType partType, int orderQty)
+            : base(id, name, partType)
         {
             this.OrderQty = orderQty;
         }
@@ -164,20 +155,37 @@ namespace Production_Planner
         {
             this.Id = part.Id;
             this.Name = part.Name;
-            this.TypeId = part.TypeId;
+            this.PartType = part.PartType;
             this.OrderQty = orderQty;
         }
     }
 
     public class PartType
     {
-        public int Id { get; set; }
+        private int _id;
+        public int Id {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                _id = value;
+                TypeName = DBHandler.GetPartTypeName(_id);
+            }
+        }
         public string TypeName { get; set; }
 
         public PartType(int id, string typeName)
         {
             Id = id;
             TypeName = typeName;
+        }
+
+        public PartType(int id)
+        {
+            Id = id;
+            TypeName = DBHandler.GetPartTypeName(id);
         }
 
         public override bool Equals(object obj)

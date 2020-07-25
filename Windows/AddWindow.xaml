@@ -82,14 +82,14 @@
                 <TextBox x:Name="txtProdCost"  Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" PreviewTextInput="txtProdCost_PreviewTextInput"/>
 
                 <Label Content="Parts" Grid.Row="2" Grid.Column="0"/>
-                <ComboBox x:Name="cbPartsList" IsEditable="True" TextSearch.TextPath="Name" Grid.Row="2" Grid.Column="1">
+                <ComboBox x:Name="cbPartsList" IsEditable="True" TextSearch.TextPath="Name" Grid.Row="2" Grid.Column="1" Height="26" VerticalAlignment="Top">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock>
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{}{0} ({1})">
                                         <Binding Path="Name"/>
-                                        <Binding Path="TypeName"/>
+                                        <Binding Path="PartType.TypeName"/>
                                     </MultiBinding>
                                 </TextBlock.Text>
                             </TextBlock>

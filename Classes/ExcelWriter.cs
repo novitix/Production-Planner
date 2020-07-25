@@ -109,7 +109,7 @@ namespace Production_Planner
             {
                 this.ws.Cells[i + startingRow, 4].Value2 = parts[i].Name;
                 this.ws.Cells[i + startingRow, 5].Value2 = parts[i].OrderQty;
-                this.ws.Cells[i + startingRow, 6].Value2 = DBHandler.GetPartTypeName(parts[i].TypeId);
+                this.ws.Cells[i + startingRow, 6].Value2 = parts[i].PartType.TypeName;
             }
 
             Range c1 = ws.Cells[startingRow, 1];
@@ -145,12 +145,12 @@ namespace Production_Planner
                     }
                     else
                     {
-                        parts.Add(new PartQty(part.Id, part.Name, part.TypeId, part.OrderQty * prod.Qty));
+                        parts.Add(new PartQty(part.Id, part.Name, part.PartType, part.OrderQty * prod.Qty));
                     }
                 }
             }
 
-            parts = parts.OrderBy(o => o.TypeId).ToList();
+            parts = parts.OrderBy(o => o.PartType.Id).ToList();
             return parts;
         }
 

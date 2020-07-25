@@ -104,7 +104,7 @@ namespace Production_Planner
                 MessageBox.Show("Please enter part quantity.");
                 return;
             }
-            prodPtList.Add(new PartQty(selItem.Id, selItem.Name, selItem.TypeId, ptQty));
+            prodPtList.Add(new PartQty(selItem.Id, selItem.Name, selItem.PartType, ptQty));
 
             cbPartsList.SelectedIndex = -1;
             txtPtQty.Clear();
