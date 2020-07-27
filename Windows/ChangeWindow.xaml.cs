@@ -81,6 +81,12 @@ namespace Production_Planner.Windows
                 return;
             }
 
+            if (cbProdList.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please choose product.");
+                return;
+            }
+
             if (prodPtList.Any(o => o.Id == selItem.Id))
             {
                 prodPtList.First(o => o.Id == selItem.Id).OrderQty += ptQty;
@@ -89,7 +95,7 @@ namespace Production_Planner.Windows
             {
                 prodPtList.Add(new PartQty(selItem, ptQty));
             }
-            PushProdPtsToDb(cbProdList.SelectedItem as Product, new List<PartQty>(prodPtList));
+            DBHandler.PushProdPtsToDb(cbProdList.SelectedItem as Product, new List<PartQty>(prodPtList));
         }
         private void txtPtQty_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
@@ -112,30 +118,20 @@ namespace Production_Planner.Windows
             
         }
 
-        private void PushProdPtsToDb(Product prod, List<PartQty> parts)
-        {
-            // clear product parts first
-            DBHandler.ExSql(string.Format("DELETE FROM part_find WHERE product_id={0}", prod.Id));
-
-            // re-add updated product's parts
-            foreach (PartQty part in parts)
-            {
-                string sql = string.Format("INSERT INTO part_find (product_id, part_id, qty) VALUES({0}, {1}, {2})", prod.Id, part.Id, part.OrderQty);
-                DBHandler.ExSql(sql);
-            }
-        }
+        
 
         private void lbPartsList_KeyDown(object sender, KeyEventArgs e)
         {
             if ( (e.Key == Key.Delete) && (lbPartsList.SelectedIndex != -1) )
             {
                 prodPtList.RemoveAt(lbPartsList.SelectedIndex);
-                PushProdPtsToDb(cbProdList.SelectedItem as Product, new List<PartQty>(prodPtList));
+                DBHandler.PushProdPtsToDb(cbProdList.SelectedItem as Product, new List<PartQty>(prodPtList));
             }
         }
 
         private void btnDelProd_Click(object sender, RoutedEventArgs e)
         {
+            if (cbProdList.SelectedIndex == -1) return;
             if (MessageBox.Show("Are you sure you want to delete this product?", "Confirm Delete", MessageBoxButton.YesNo) != MessageBoxResult.Yes) return;
             int prodId = (cbProdList.SelectedItem as Product).Id;
             List<string> sql = new List<string>();
@@ -164,10 +160,6 @@ namespace Production_Planner.Windows
             (cbModPartList.SelectedItem as Part).PartType.InvokeIdChanged();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
         private void PushPartsToDb()
         {
             string sql;
@@ -189,5 +181,56 @@ namespace Production_Planner.Windows
             }
         }
         #endregion
+
+        private void btnDelPartType_Click(object sender, RoutedEventArgs e)
+        {
+            if (cbModPartTypeList.SelectedIndex == -1) return;
+            if (MessageBox.Show("This will delete all parts that have this part type and remove these parts from existing products. Are you sure you wish to continue?", "Confirmation", MessageBoxButton.YesNo) != MessageBoxResult.Yes) return;
+            int partTypeId = (cbModPartTypeList.SelectedItem as PartType).Id;
+
+            // delete part type
+            DBHandler.ExSql(string.Format("DELETE FROM part_type WHERE id={0}", partTypeId));
+
+            // find parts with this part type
+            List<int> partIds = new List<int>();
+            using (var reader = DBHandler.GetReader(string.Format("SELECT id FROM parts WHERE type={0}", partTypeId)))
+            {
+                while (reader.Read())
+                {
+                    int partId = reader.GetInt32(0);
+                    partIds.Add(partId);
+                }
+            }
+
+            // delete parts with this part type
+            DBHandler.ExSql(string.Format("DELETE FROM parts WHERE type={0}", partTypeId));
+
+            // delete these parts from products
+            DBHandler.ExSql(string.Format("DELETE FROM part_find WHERE part_id IN({0})", ConvertIdListForDb(partIds)));
+
+            cbModPartTypeList.SelectedIndex = -1;
+            UpdatePartTypeList();
+        }
+
+        private string ConvertIdListForDb(List<int> lst)
+        {
+            List<string> strLst = lst.ConvertAll(delegate (int i) { return i.ToString(); });
+            return "'" + string.Join("', '", strLst) + "'";
+        }
+
+        private void btnDelPt_Click(object sender, RoutedEventArgs e)
+        {
+            if (cbModPartList.SelectedIndex == -1) return;
+            if (MessageBox.Show("This will delete the part and remove it from all existing products. Are you sure you wish to continue?", "Confirmation", MessageBoxButton.YesNo) != MessageBoxResult.Yes) return;
+
+            int ptId = (cbModPartList.SelectedItem as Part).Id;
+            List<string> sql = new List<string>();
+            sql.Add(string.Format("DELETE FROM parts WHERE id={0}", ptId));
+            sql.Add(string.Format("DELETE FROM part_find WHERE part_id={0}", ptId));
+            DBHandler.ExSql(sql);
+
+            cbModPartList.SelectedIndex = -1;
+            UpdatePartList();
+        }
     }
 }

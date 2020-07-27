@@ -105,7 +105,7 @@
                 </Button>
 
                 <Label Content="Added Parts" Grid.Row="4" Grid.Column="0"/>
-                <ListBox x:Name="lbPartsList" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Height="200">
+                <ListBox x:Name="lbPartsList" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Height="200" KeyDown="lbPartsList_KeyDown">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock>

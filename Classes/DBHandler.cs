@@ -180,6 +180,7 @@ namespace Production_Planner
             using (SqliteDataReader reader = GetReader(sql))
             {
                 reader.Read();
+                
                 res = new Product(id, reader.GetString(1), reader.GetDouble(2));
             }
             return res;
@@ -238,6 +239,19 @@ namespace Production_Planner
                 {
                     fi.Delete();
                 }
+            }
+        }
+
+        public static void PushProdPtsToDb(Product prod, List<PartQty> parts)
+        {
+            // clear product parts first
+            DBHandler.ExSql(string.Format("DELETE FROM part_find WHERE product_id={0}", prod.Id));
+
+            // re-add updated product's parts
+            foreach (PartQty part in parts)
+            {
+                string sql = string.Format("INSERT INTO part_find (product_id, part_id, qty) VALUES({0}, {1}, {2})", prod.Id, part.Id, part.OrderQty);
+                ExSql(sql);
             }
         }
 

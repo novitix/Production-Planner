@@ -85,7 +85,7 @@ namespace Production_Planner
 
             UpdatePartList();
             txtPartName.Clear();
-            txtPartName.Focus();
+            txtPartName.Focus(); 
             SetStatus("Part added successfully");
         }
 
@@ -104,7 +104,15 @@ namespace Production_Planner
                 MessageBox.Show("Please enter part quantity.");
                 return;
             }
-            prodPtList.Add(new PartQty(selItem.Id, selItem.Name, selItem.PartType, ptQty));
+
+            if (prodPtList.Any(o => o.Id == selItem.Id))
+            {
+                prodPtList.First(o => o.Id == selItem.Id).OrderQty += ptQty;
+            }
+            else
+            {
+                prodPtList.Add(new PartQty(selItem.Id, selItem.Name, selItem.PartType, ptQty));
+            }
 
             cbPartsList.SelectedIndex = -1;
             txtPtQty.Clear();
@@ -170,6 +178,14 @@ namespace Production_Planner
         private void cbPartType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        private void lbPartsList_KeyDown(object sender, KeyEventArgs e)
+        {
+            if ((e.Key == Key.Delete) && (lbPartsList.SelectedIndex != -1))
+            {
+                prodPtList.RemoveAt(lbPartsList.SelectedIndex);
+            }
         }
     }
 }

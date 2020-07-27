@@ -169,6 +169,7 @@ namespace Production_Planner
 
         private void txtExRate_TextChanged(object sender, TextChangedEventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(txtExRate.Text)) return;
             Properties.Settings.Default.ExRate = decimal.Parse(txtExRate.Text);
             Properties.Settings.Default.Save();
         }
