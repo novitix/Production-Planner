@@ -25,7 +25,18 @@ namespace Production_Planner
                 OnPropertyChanged("Name");
             }
         }
-        public double CostRmb { get; set; }
+        private double _costRmb;
+        public double CostRmb {
+        get
+            {
+                return _costRmb;
+            }
+        set
+            {
+                _costRmb = value;
+                OnPropertyChanged("CostRmb");
+            }
+        }
 
         public Product() { }
 

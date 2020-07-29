@@ -26,7 +26,14 @@
         <ListBox x:Name="disp_products" Width="200" Margin="10,10" DockPanel.Dock="Left" Background="#EEE">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Path=Name}"/>
+                    <TextBlock>
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0} - ({1} RMB)">
+                                <Binding Path="Name"/>
+                                <Binding Path="CostRmb"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
                 </DataTemplate>
             </ListBox.ItemTemplate>
 

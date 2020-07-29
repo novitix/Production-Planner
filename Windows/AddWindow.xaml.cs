@@ -51,7 +51,10 @@ namespace Production_Planner
 
         private void UpdatePartTypes()
         {
-            partTypes = new ObservableCollection<PartType>(DBHandler.GetAllPartTypes());
+            // sortLst is needed as ObservableCollections cannot be sorted this way.
+            var sortLst = DBHandler.GetAllPartTypes();
+            sortLst.Sort((i1, i2) => i1.TypeName.CompareTo(i2.TypeName));
+            partTypes = new ObservableCollection<PartType>(sortLst);
             cbPartType.ItemsSource = partTypes;
         }
 
