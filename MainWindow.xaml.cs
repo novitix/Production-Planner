@@ -68,7 +68,16 @@ namespace Production_Planner
 
         public void RefreshProductList()
         {
-            disp_products.ItemsSource = DBHandler.GetAllProducts();
+            List<Product> sortLst = DBHandler.GetAllProducts();
+            sortLst.Sort((i1, i2) => GetLastWord(i1.Name).CompareTo(GetLastWord(i2.Name)));
+
+            disp_products.ItemsSource = sortLst;
+        }
+
+        private string GetLastWord(string str)
+        {
+            string[] arr = str.Split(' ');
+            return arr.Last();
         }
 
         public void RefreshOrderList()

@@ -48,9 +48,9 @@ namespace Production_Planner
 
             UpdateBackups();
         }
-        public static ObservableCollection<Product> GetAllProducts()
+        public static List<Product> GetAllProducts()
         {
-            var res = new ObservableCollection<Product>();
+            var res = new List<Product>();
             string sql = @"SELECT * FROM products";
             using (SqliteDataReader reader = GetReader(sql))
             {
