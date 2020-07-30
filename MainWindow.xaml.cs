@@ -92,7 +92,7 @@ namespace Production_Planner
             if (orderList == null) return;
             double sum = orderList.Sum(o => o.CostRmb * o.Qty);
             double audSum = Classes.Tools.CalcExRate(sum, double.Parse(txtExRate.Text));
-            txtAudCost.Text = audSum.ToString() + " AUD";
+            txtAudCost.Text = audSum.ToString();
         }
 
         private void btnSettings_Click(object sender, RoutedEventArgs e)

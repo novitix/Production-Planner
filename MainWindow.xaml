@@ -24,7 +24,7 @@
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
                             <TextBlock Text="Get Order"/>
-                            <TextBlock x:Name="txtAudCost" Text="0.00 AUD" FontSize="8.5" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                            <TextBlock x:Name="txtAudCost" Text="0.00" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                         </StackPanel>
                     </Button.Content>
                 </Button>
