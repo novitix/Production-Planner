@@ -118,15 +118,12 @@ namespace Production_Planner.Windows
             
         }
 
-        
-
         private void lbPartsList_KeyDown(object sender, KeyEventArgs e)
         {
-            if ( (e.Key == Key.Delete) && (lbPartsList.SelectedIndex != -1) )
-            {
-                prodPtList.RemoveAt(lbPartsList.SelectedIndex);
-                DBHandler.PushProdPtsToDb(cbProdList.SelectedItem as Product, new List<PartQty>(prodPtList));
-            }
+            if (IsQtyBoxFocused || e.Key != Key.Delete || lbPartsList.SelectedIndex == -1) return;
+
+            prodPtList.RemoveAt(lbPartsList.SelectedIndex);
+            DBHandler.PushProdPtsToDb(cbProdList.SelectedItem as Product, new List<PartQty>(prodPtList));
         }
 
         private void btnDelProd_Click(object sender, RoutedEventArgs e)
@@ -235,6 +232,35 @@ namespace Production_Planner.Windows
 
             cbModPartList.SelectedIndex = -1;
             UpdatePartList();
+        }
+
+        private void txtItemQty_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = Verifier.HasIllegalChars(true, e);
+        }
+
+        bool IsQtyBoxFocused = false;
+
+        private void txtItemQty_GotFocus(object sender, RoutedEventArgs e)
+        {
+            IsQtyBoxFocused = true;
+        }
+
+        private void txtItemQty_LostFocus(object sender, RoutedEventArgs e)
+        {
+            IsQtyBoxFocused = false;
+        }
+
+        private void txtItemQty_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if ( string.IsNullOrWhiteSpace((sender as TextBox).Text) ) return;
+
+            int selProdId = (cbProdList.SelectedItem as Product).Id;
+            foreach (PartQty pt in prodPtList)
+            {
+                string sql = string.Format("UPDATE part_find SET qty={0} WHERE product_id={1} AND part_id={2}", pt.OrderQty, selProdId, pt.Id);
+                DBHandler.ExSql(sql);
+            }
         }
     }
 }

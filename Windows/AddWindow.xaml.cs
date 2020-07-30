@@ -185,15 +185,30 @@ namespace Production_Planner
 
         private void lbPartsList_KeyDown(object sender, KeyEventArgs e)
         {
-            if ((e.Key == Key.Delete) && (lbPartsList.SelectedIndex != -1))
-            {
-                prodPtList.RemoveAt(lbPartsList.SelectedIndex);
-            }
+            if (IsQtyBoxFocused || e.Key != Key.Delete || lbPartsList.SelectedIndex == -1) return;
+            prodPtList.RemoveAt(lbPartsList.SelectedIndex);
         }
 
         private void cbPartsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        private void txtItemQty_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = Verifier.HasIllegalChars(true, e);
+        }
+
+        bool IsQtyBoxFocused = false;
+
+        private void txtItemQty_GotFocus(object sender, RoutedEventArgs e)
+        {
+            IsQtyBoxFocused = true;
+        }
+
+        private void txtItemQty_LostFocus(object sender, RoutedEventArgs e)
+        {
+            IsQtyBoxFocused = false;
         }
     }
 }

@@ -68,16 +68,24 @@
 
                         <Label Content="Added Parts" Grid.Row="5" Grid.Column="0"/>
                         <ListBox x:Name="lbPartsList" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Height="200" KeyDown="lbPartsList_KeyDown">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock>
-                                        <TextBlock.Text>
-                                            <MultiBinding StringFormat="{}{0} ({1}x)">
-                                                <Binding Path="Name"/>
-                                                <Binding Path="OrderQty"/>
-                                            </MultiBinding>
-                                        </TextBlock.Text>
-                                    </TextBlock>
+                                    <DockPanel>
+                                        <TextBox x:Name="txtItemQty" Width="50" DockPanel.Dock="Right" Text="{Binding Path=OrderQty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}" PreviewTextInput="txtItemQty_PreviewTextInput" GotFocus="txtItemQty_GotFocus" LostFocus="txtItemQty_LostFocus" TextChanged="txtItemQty_TextChanged"/>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} ({1})">
+                                                    <Binding Path="Name"/>
+                                                    <Binding Path="PartType.TypeName"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DockPanel>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
