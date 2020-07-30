@@ -144,8 +144,8 @@ namespace Production_Planner
 
     public class PartQty : Part
     {
-        private int _orderQty;
-        public int OrderQty { 
+        private double _orderQty;
+        public double OrderQty { 
             get
             {
                 return _orderQty;
@@ -156,13 +156,13 @@ namespace Production_Planner
                 OnPropertyChanged("OrderQty");
             }
         }
-        public PartQty(int id, string name, PartType partType, int orderQty)
+        public PartQty(int id, string name, PartType partType, double orderQty)
             : base(id, name, partType)
         {
             this.OrderQty = orderQty;
         }
 
-        public PartQty(Part part, int orderQty)
+        public PartQty(Part part, double orderQty)
         {
             this.Id = part.Id;
             this.Name = part.Name;

@@ -74,8 +74,8 @@ namespace Production_Planner.Windows
                 return;
             }
 
-            int ptQty;
-            if (int.TryParse(txtPtQty.Text, out ptQty) == false)
+            double ptQty;
+            if (double.TryParse(txtPtQty.Text, out ptQty) == false)
             {
                 MessageBox.Show("Please enter part quantity.");
                 return;
@@ -99,7 +99,7 @@ namespace Production_Planner.Windows
         }
         private void txtPtQty_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = Verifier.HasIllegalChars(false, e);
+            e.Handled = Verifier.HasIllegalChars(true, e);
         }
 
         private void txtProdCost_PreviewTextInput(object sender, TextCompositionEventArgs e)

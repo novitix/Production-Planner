@@ -68,9 +68,9 @@ namespace Production_Planner
         private class PartFindRes
         {
             public int PartId { get; set; }
-            public int Qty { get; set; }
+            public double Qty { get; set; }
 
-            public PartFindRes(int partId, int qty)
+            public PartFindRes(int partId, double qty)
             {
                 PartId = partId;
                 Qty = qty;
@@ -87,7 +87,7 @@ namespace Production_Planner
             {
                 while (reader.Read())
                 {
-                    partFindList.Add(new PartFindRes(reader.GetInt32(0), reader.GetInt32(1)));
+                    partFindList.Add(new PartFindRes(reader.GetInt32(0), reader.GetDouble(1)));
                 }
             }
 

@@ -82,7 +82,7 @@
                 <TextBox x:Name="txtProdCost"  Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" PreviewTextInput="txtProdCost_PreviewTextInput"/>
 
                 <Label Content="Parts" Grid.Row="2" Grid.Column="0"/>
-                <ComboBox x:Name="cbPartsList" IsEditable="True" TextSearch.TextPath="Name" Grid.Row="2" Grid.Column="1" Height="26" VerticalAlignment="Top">
+                <ComboBox x:Name="cbPartsList" IsEditable="True" TextSearch.TextPath="Name" Grid.Row="2" Grid.Column="1" Height="26" VerticalAlignment="Top" SelectionChanged="cbPartsList_SelectionChanged">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock>
