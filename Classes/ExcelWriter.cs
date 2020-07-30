@@ -121,7 +121,7 @@ namespace Production_Planner
 
         private int writeCost(double exRate, double rmbCost, int startingRow)
         {
-            double audCost = Math.Round(rmbCost / exRate, 2);
+            double audCost = Classes.Tools.CalcExRate(rmbCost, exRate);
             rmbCost = Math.Round(rmbCost, 2);
             this.ws.Cells[startingRow, 4].Value2 = string.Format("Total Cost: {0} AUD ({1} RMB)", audCost, rmbCost);
 

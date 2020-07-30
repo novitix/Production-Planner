@@ -31,8 +31,8 @@ namespace Production_Planner
         {
             InitializeComponent();
             RefreshProductList();
-            RefreshOrderList();
             txtExRate.Text = Properties.Settings.Default.ExRate.ToString();
+            RefreshOrderList();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -51,7 +51,7 @@ namespace Production_Planner
             {
                 orderList.Add(new ProductQty(selItem, 1));
             }
-            
+            UpdateOrderCost();
         }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
@@ -84,6 +84,15 @@ namespace Production_Planner
         {
             orderList = new ObservableCollection<ProductQty>(DBHandler.GetOrderList());
             lbOrderProds.ItemsSource = orderList;
+            UpdateOrderCost();
+        }
+
+        private void UpdateOrderCost()
+        {
+            if (orderList == null) return;
+            double sum = orderList.Sum(o => o.CostRmb * o.Qty);
+            double audSum = Classes.Tools.CalcExRate(sum, double.Parse(txtExRate.Text));
+            txtAudCost.Text = audSum.ToString() + " AUD";
         }
 
         private void btnSettings_Click(object sender, RoutedEventArgs e)
@@ -181,6 +190,7 @@ namespace Production_Planner
             if (string.IsNullOrWhiteSpace(txtExRate.Text)) return;
             Properties.Settings.Default.ExRate = decimal.Parse(txtExRate.Text);
             Properties.Settings.Default.Save();
+            UpdateOrderCost();
         }
 
         private void btnGetSs_Click_1(object sender, RoutedEventArgs e)
@@ -201,6 +211,8 @@ namespace Production_Planner
         {
             if (IsQtyBoxFocused || e.Key != Key.Delete || lbOrderProds.SelectedIndex == -1) return;
             orderList.RemoveAt(lbOrderProds.SelectedIndex);
+
+            UpdateOrderCost();
         }
 
         bool IsQtyBoxFocused = false;
@@ -228,7 +240,16 @@ namespace Production_Planner
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Allowed noninteger values for part quantities.");
+            MessageBox.Show("- Allowed noninteger values for part quantities.\n" +
+                "- Part quantities in add and change window can be changed on the fly using a TextBox.\n" +
+                "- Cost under Get Order button.");
+        }
+
+        private void txtItemQty_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            if (string.IsNullOrWhiteSpace(tb.Text)) return;
+            UpdateOrderCost();
         }
     }
 
