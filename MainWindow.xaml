@@ -21,6 +21,7 @@
                 <Label FontWeight="DemiBold" Content="Exchange Rate" Padding="0,0,0,5"/>
                 <TextBox x:Name="txtExRate" PreviewTextInput="txtExRate_PreviewTextInput" TextChanged="txtExRate_TextChanged"  Width="79"/>
                 <Button x:Name="btnGetSs" Width="80" Height="60" Click="btnGetSs_Click_1"  Margin="0,5,0,0" IsDefault="True">Get Order</Button>
+                <Button Content="Change Log" Click="Button_Click"/>
             </StackPanel>
         </DockPanel>
         <ListBox x:Name="disp_products" Width="200" Margin="10,10" DockPanel.Dock="Left" Background="#EEE">

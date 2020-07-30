@@ -225,6 +225,11 @@ namespace Production_Planner
             wnd.Owner = this;
             wnd.ShowDialog();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Allowed noninteger values for part quantities.");
+        }
     }
 
 }
