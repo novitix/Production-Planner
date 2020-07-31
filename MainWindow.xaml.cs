@@ -234,7 +234,7 @@ namespace Production_Planner
         {
             MessageBox.Show("- Allowed noninteger values for part quantities.\n" +
                 "- Part quantities in add and change window can be changed on the fly using a TextBox.\n" +
-                "- Cost under Get Order button.");
+                "- Cost under Get Order button.\nAll lists are sorted with prod lists sorting by last word.\nExtended combobox length.");
         }
 
         private void txtItemQty_TextChanged(object sender, TextChangedEventArgs e)

@@ -45,8 +45,10 @@ namespace Production_Planner
             lbPartsList.ItemsSource = prodPtList;
 
             UpdatePartTypes();
-
             SetStatus("Ready");
+            cbPartsList.MaxDropDownHeight = Classes.Tools.GetMaxDropHeight();
+            cbPartType.MaxDropDownHeight = Classes.Tools.GetMaxDropHeight();
+            
         }
 
         private void UpdatePartTypes()

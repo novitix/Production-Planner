@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Production_Planner.Classes;
 
 namespace Production_Planner.Windows
 {
@@ -26,6 +27,12 @@ namespace Production_Planner.Windows
             UpdateProdsList();
             UpdatePartList();
             UpdatePartTypeList();
+
+            cbProdList.MaxDropDownHeight = Tools.GetMaxDropHeight();
+            cbPartType.MaxDropDownHeight = Tools.GetMaxDropHeight();
+            cbPartsList.MaxDropDownHeight = Tools.GetMaxDropHeight();
+            cbModPartTypeList.MaxDropDownHeight = Tools.GetMaxDropHeight();
+            cbModPartList.MaxDropDownHeight = Tools.GetMaxDropHeight();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Production_Planner" x:Class="Production_Planner.AddWindow"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
-        Title="Add Items" Height="561.992" Width="400" ResizeMode="NoResize">
+        Title="Add Items" MinHeight="575.325" Height="575.325" Width="430">
     <Window.Resources>
         <Storyboard x:Name="sbStatus" x:Key="sb">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="txtStatus">
@@ -105,7 +105,7 @@
                 </Button>
 
                 <Label Content="Added Parts" Grid.Row="4" Grid.Column="0"/>
-                <ListBox x:Name="lbPartsList" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Height="200" KeyDown="lbPartsList_KeyDown">
+                <ListBox x:Name="lbPartsList" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" MinHeight="200" KeyDown="lbPartsList_KeyDown">
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="ListBoxItem">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
