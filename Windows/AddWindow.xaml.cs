@@ -118,7 +118,6 @@ namespace Production_Planner
             }
 
             cbPartsList.SelectedIndex = -1;
-            txtPtQty.Clear();
             cbPartsList.Focus();
             SetStatus("Part added to Product successfully");
         }

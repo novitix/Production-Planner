@@ -69,15 +69,7 @@ namespace Production_Planner
         public void RefreshProductList()
         {
             List<Product> sortLst = DBHandler.GetAllProducts();
-            sortLst.Sort((i1, i2) => GetLastWord(i1.Name).CompareTo(GetLastWord(i2.Name)));
-
             disp_products.ItemsSource = sortLst;
-        }
-
-        private string GetLastWord(string str)
-        {
-            string[] arr = str.Split(' ');
-            return arr.Last();
         }
 
         public void RefreshOrderList()
@@ -92,7 +84,7 @@ namespace Production_Planner
             if (orderList == null) return;
             double sum = orderList.Sum(o => o.CostRmb * o.Qty);
             double audSum = Classes.Tools.CalcExRate(sum, double.Parse(txtExRate.Text));
-            txtAudCost.Text = audSum.ToString();
+            txtAudCost.Text = "$" + audSum.ToString();
         }
 
         private void btnSettings_Click(object sender, RoutedEventArgs e)

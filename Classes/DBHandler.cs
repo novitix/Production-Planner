@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Data.Sqlite;
+using Production_Planner.Classes;
 using _IO = System.IO;
 
 namespace Production_Planner
@@ -60,8 +61,8 @@ namespace Production_Planner
                     res.Add(prod);
                 }
             }
-                
 
+            Sorting.SortProductsAlpha(res);
             return res;
         }
 
@@ -112,7 +113,9 @@ namespace Production_Planner
                 
                 }
             }
-                
+
+            Sorting.SortPartsAlpha(res);
+
             return res;
         }
 
@@ -132,6 +135,8 @@ namespace Production_Planner
                     res.Add(new Part(partId, partName, new PartType(partTypeId)));
                 }
             }
+
+            Sorting.SortPartsAlpha(res);
             return res;
         }
 
@@ -170,6 +175,8 @@ namespace Production_Planner
                     res.Add(new PartType(reader.GetInt32(0), reader.GetString(1)));
                 }
             }
+
+            Sorting.SortPartTypesAlpha(res);
             return res;
         }
 
