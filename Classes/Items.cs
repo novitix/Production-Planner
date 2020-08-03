@@ -152,8 +152,12 @@ namespace Production_Planner
             }
             set
             {
-                _orderQty = value;
-                OnPropertyChanged("OrderQty");
+                if (_orderQty != value)
+                {
+                    _orderQty = value;
+                    OnPropertyChanged("OrderQty");
+                }
+
             }
         }
         public PartQty(int id, string name, PartType partType, double orderQty)

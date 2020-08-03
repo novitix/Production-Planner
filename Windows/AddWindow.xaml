@@ -16,6 +16,7 @@
                 <EasingDoubleKeyFrame KeyTime="0:0:3.1" Value="0"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
+        <local:DbTxtConverter x:Key="DbTxtConverter"/>
     </Window.Resources>
 
     <StackPanel>
@@ -114,7 +115,7 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <DockPanel>
-                                <TextBox x:Name="txtItemQty" Width="50" DockPanel.Dock="Right" Text="{Binding Path=OrderQty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}" PreviewTextInput="txtItemQty_PreviewTextInput" GotFocus="txtItemQty_GotFocus" LostFocus="txtItemQty_LostFocus"/>
+                                <TextBox x:Name="txtItemQty" Width="50" DockPanel.Dock="Right" Text="{Binding Path=OrderQty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, Converter={StaticResource DbTxtConverter}}" PreviewTextInput="txtItemQty_PreviewTextInput" GotFocus="txtItemQty_GotFocus" LostFocus="txtItemQty_LostFocus"/>
                                 <TextBlock>
                                     <TextBlock.Text>
                                         <MultiBinding StringFormat="{}{0} ({1})">
