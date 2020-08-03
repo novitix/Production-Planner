@@ -96,7 +96,7 @@ namespace Production_Planner
 
         private void txtItemQty_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-             e.Handled = Verifier.HasIllegalChars(false, e);
+             e.Handled = Verifier.HasIllegalChars(true, e);
         }
 
         private void PushOrderList()
@@ -234,7 +234,8 @@ namespace Production_Planner
         {
             MessageBox.Show("- Allowed noninteger values for part quantities.\n" +
                 "- Part quantities in add and change window can be changed on the fly using a TextBox.\n" +
-                "- Cost under Get Order button.\nAll lists are sorted with prod lists sorting by last word.\nExtended combobox length.");
+                "- Cost under Get Order button.\n- All lists are sorted with prod lists sorting by last word.\n- Extended combobox length." +
+                "\n- Part sorting is now by category.");
         }
 
         private void txtItemQty_TextChanged(object sender, TextChangedEventArgs e)

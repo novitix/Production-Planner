@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using _IO = System.IO;
 using Microsoft.Office.Interop.Excel;
 using _Excel = Microsoft.Office.Interop.Excel;
+using System.Windows.Forms;
 
 namespace Production_Planner
 {
@@ -46,8 +47,18 @@ namespace Production_Planner
             lastFilledRow += margin;
             lastFilledRow += WriteColumns(prodsCols, lastFilledRow, 4);
             lastFilledRow += WriteProducts(prods, lastFilledRow);
-            wb.SaveAs(path);
-            this.wb.Close();
+            try
+            {
+                wb.SaveAs(path);
+            }
+            catch (System.Runtime.InteropServices.COMException e)
+            {
+                MessageBox.Show("Error: " + e.Message + " Please choose a new destination in the next dialog.");
+            }
+            finally
+            {
+                this.wb.Close();
+            }
         }
 
         private int WriteProducts(List<ProductQty> prods, int startingRow)
