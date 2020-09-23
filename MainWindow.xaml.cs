@@ -35,6 +35,11 @@ namespace Production_Planner
             RefreshOrderList();
         }
 
+        private void OrderList_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            UpdateOrderCost();
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
 
@@ -69,6 +74,7 @@ namespace Production_Planner
         public void RefreshProductList()
         {
             List<Product> sortLst = DBHandler.GetAllProducts();
+
             disp_products.ItemsSource = sortLst;
         }
 
@@ -76,6 +82,7 @@ namespace Production_Planner
         {
             orderList = new ObservableCollection<ProductQty>(DBHandler.GetOrderList());
             lbOrderProds.ItemsSource = orderList;
+            orderList.CollectionChanged += OrderList_CollectionChanged;
             UpdateOrderCost();
         }
 
@@ -117,7 +124,7 @@ namespace Production_Planner
             PushOrderList();
         }
 
-        private string GetSpreadsheet()
+        public string GetSpreadsheet(List<ProductQty> orderList)
         {
             if (String.IsNullOrEmpty(txtExRate.Text))
             {
@@ -131,8 +138,13 @@ namespace Production_Planner
             //string path = (Properties.Settings.Default.SpreadsheetLocation == "Documents") ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : _IO.Path.GetFullPath(Properties.Settings.Default.SpreadsheetLocation);
             //path = _IO.Path.Combine(path, name);
 
-            exWrite.WriteToExcel(new List<ProductQty>(orderList), path, double.Parse(txtExRate.Text), GetCost());
+            exWrite.WriteToExcel(orderList, path, double.Parse(txtExRate.Text), GetCost());
             return path;
+        }
+
+        public string GetSpreadsheet(ObservableCollection<ProductQty> orderList)
+        {
+            return GetSpreadsheet(new List<ProductQty>(orderList));
         }
 
         private string GetSaveLocation()
@@ -162,7 +174,7 @@ namespace Production_Planner
             return sum;
         }
 
-        private void RunAndWait(string path)
+        public void RunAndWait(string path)
         {
             var proc = new System.Diagnostics.Process();
             proc.StartInfo.FileName = "explorer.exe";
@@ -192,7 +204,7 @@ namespace Production_Planner
                 MessageBox.Show("Order list is empty!");
                 return;
             }
-            var path = GetSpreadsheet();
+            var path = GetSpreadsheet(orderList);
             if (!string.IsNullOrEmpty(path))
             {
                 RunAndWait(path);
@@ -243,6 +255,47 @@ namespace Production_Planner
             TextBox tb = sender as TextBox;
             if (string.IsNullOrWhiteSpace(tb.Text)) return;
             UpdateOrderCost();
+        }
+
+        private void btnCreateOrder_Click(object sender, RoutedEventArgs e)
+        {
+            var wnd = new Windows.AddOrderWindow();
+            wnd.Owner = this;
+            wnd.ShowDialog();
+
+            if (wnd.OrderPlaceCancelled) return;
+
+            // insert order record
+            string orderName = wnd.OrderName;
+            string orderComments = wnd.OrderComments;
+            string sql = string.Format("INSERT INTO orders (name, comments) VALUES('{0}', '{1}')", orderName, orderComments);
+            DBHandler.ExSql(sql);
+
+           int lastOrderId = DBHandler.GetLastOrderId();
+
+            // insert order products
+            foreach (ProductQty item in orderList)
+            {
+                sql = string.Format("INSERT INTO order_find (order_id, prod_id, qty) VALUES({0}, {1}, {2})", lastOrderId, item.Id, item.Qty);
+                DBHandler.ExSql(sql);
+            }
+
+            // clear order list
+            orderList.Clear();
+        }
+
+        private void btnOrderHistory_Click(object sender, RoutedEventArgs e)
+        {
+            var wnd = new Windows.OrderHistoryWindow();
+            wnd.Owner = this;
+            wnd.ShowDialog();
+            if (wnd.loadOrder)
+            {
+                orderList = new ObservableCollection<ProductQty>(wnd.selOrderList);
+                lbOrderProds.ItemsSource = orderList;
+                orderList.CollectionChanged += OrderList_CollectionChanged;
+                UpdateOrderCost();
+            }
         }
     }
 

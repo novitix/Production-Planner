@@ -10,6 +10,8 @@
     <DockPanel>
         <DockPanel DockPanel.Dock="Right" Margin="10,10,10,10">
             <StackPanel DockPanel.Dock="Bottom">
+                <Button x:Name="btnOrderHistory" VerticalAlignment="Center" Width="80" Height="60" Click="btnOrderHistory_Click"  Margin="0,0,0,10">Order History</Button>
+                <Button x:Name="btnCreateOrder" VerticalAlignment="Center" Width="80" Height="60" Click="btnCreateOrder_Click"  Margin="0,0,0,10">Create Order</Button>
                 <Button x:Name="btnClearOrder" VerticalAlignment="Center" Width="80" Height="60" Click="btnClearOrder_Click"  Margin="0,0,0,10">Clear Order</Button>
                 <Button x:Name="btnAdd" VerticalAlignment="Center" Width="80" Height="60" Click="btnAdd_Click" Margin="0,0,0,10">Add Items</Button>
                 <Button x:Name="btnChange" VerticalAlignment="Center" Width="80" Height="60" Click="btnChange_Click"  Margin="0,0,0,10">
@@ -23,7 +25,7 @@
                 <Button x:Name="btnGetSs" Width="80" Height="60" Click="btnGetSs_Click_1"  Margin="0,5,0,0" IsDefault="True">
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
-                            <TextBlock Text="Get Order"/>
+                            <TextBlock Text="Get Sheet"/>
                             <TextBlock x:Name="txtAudCost" Text="$0.00" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                         </StackPanel>
                     </Button.Content>
@@ -32,6 +34,17 @@
             </StackPanel>
         </DockPanel>
         <ListBox x:Name="disp_products" Width="200" Margin="10,10" DockPanel.Dock="Left" Background="#EEE">
+            <ListBox.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="#996515" BorderThickness="1">
+                                <TextBlock Text="{Binding Path=Name}" FontWeight="Bold" HorizontalAlignment="Center" Background="#eee8aa"/>
+                            </Border>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </ListBox.GroupStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock>

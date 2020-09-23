@@ -31,7 +31,7 @@ namespace Production_Planner.Classes
 
         public static void SortPartsAlpha(List<PartQty> parts)
         {
-            parts.Sort((i1, i2) => i1.Name.CompareTo(i2.Name));
+            parts.Sort((i1, i2) => i1.PartType.TypeName.CompareTo(i2.PartType.TypeName));
         }
 
         public static void SortPartTypesAlpha(List<PartType> pt)

@@ -8,6 +8,38 @@ using System.Threading.Tasks;
 
 namespace Production_Planner
 {
+    public class Order : INotifyPropertyChanged
+    {
+        public int Id { get; set; }
+        private string _name;
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                _name = value;
+                OnPropertyChanged("Name");
+            }
+        }
+        public string Comments { get; set; }
+
+
+        public Order(int id, string name, string comments)
+        {
+            Id = id;
+            Name = name;
+            Comments = comments;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
 
     public class Product : INotifyPropertyChanged
     {

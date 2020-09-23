@@ -21,5 +21,7 @@ namespace Production_Planner.Classes
             // returns AUD amount to 2 d.p.
             return Math.Round(rmbCost / exRate, 2);
         }
+
+
     }
 }

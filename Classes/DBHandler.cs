@@ -262,5 +262,53 @@ namespace Production_Planner
             }
         }
 
+
+        public static List<Order> GetAllOrders()
+        {
+            string sql = string.Format("SELECT * FROM orders");
+            var res = new List<Order>();
+            using (SqliteDataReader r = GetReader(sql))
+            {
+                while (r.Read())
+                {
+                    res.Add(new Order(r.GetInt32(0), r.GetString(1), r.GetString(2)));
+                }
+            }
+
+            res.Reverse();
+            return res;
+        }
+
+        public static List<ProductQty> GetOrderProductList(int orderId)
+        {
+            string sql = string.Format(@"SELECT prod_id, qty FROM order_find WHERE order_id={0}", orderId);
+            var res = new List<ProductQty>();
+            using (SqliteDataReader reader = GetReader(sql))
+            {
+                while (reader.Read())
+                {
+                    int prodId = reader.GetInt32(0);
+                    Product prod = GetProduct(prodId);
+                    int qty = reader.GetInt32(1);
+                    res.Add(new ProductQty(prod, qty));
+                }
+            }
+
+            Sorting.SortProductsAlpha(res);
+            return res;
+        }
+
+        public static int GetLastOrderId()
+        {
+            string sql = string.Format("SELECT MAX(order_id) FROM orders");
+            int id = 0;
+            using (SqliteDataReader reader = GetReader(sql))
+            {
+                reader.Read();
+                id = reader.GetInt32(0);
+            }
+            return id;
+        }
+
     }
 }
