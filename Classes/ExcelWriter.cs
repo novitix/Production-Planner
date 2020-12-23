@@ -22,16 +22,14 @@ namespace Production_Planner
                 new ColumnDef("", 5),
                 new ColumnDef("Arrived", 10),
                 new ColumnDef("Ordered", 10),
-                new ColumnDef("Parts", 47),
                 new ColumnDef("Order Qty", 15),
-                new ColumnDef("Product Type", 15),
-                new ColumnDef("Notes", 35),
-                new ColumnDef("Comments", 52)
+                new ColumnDef("Parts", 47),
+                new ColumnDef("Product Type", 15)
                };
             ColumnDef[] prodsCols = new ColumnDef[]
             {
-                new ColumnDef("Products", -1),
                 new ColumnDef("Qty", -1),
+                new ColumnDef("Products", -1),
                 new ColumnDef("Total Cost", -1)
             };
 
@@ -65,8 +63,8 @@ namespace Production_Planner
         {
             for (int i = 0; i < prods.Count; i++)
             {
-                this.ws.Cells[startingRow + i, 4] = prods[i].Name;
-                this.ws.Cells[startingRow + i, 5] = prods[i].Qty;
+                this.ws.Cells[startingRow + i, 4] = prods[i].Qty;
+                this.ws.Cells[startingRow + i, 5] = prods[i].Name;
                 this.ws.Cells[startingRow + i, 6] = prods[i].TotalCost;
             }
 
@@ -118,13 +116,13 @@ namespace Production_Planner
         {
             for (int i = 0; i < parts.Count; i++)
             {
-                this.ws.Cells[i + startingRow, 4].Value2 = parts[i].Name;
-                this.ws.Cells[i + startingRow, 5].Value2 = parts[i].OrderQty;
+                this.ws.Cells[i + startingRow, 4].Value2 = parts[i].OrderQty;
+                this.ws.Cells[i + startingRow, 5].Value2 = parts[i].Name;
                 this.ws.Cells[i + startingRow, 6].Value2 = parts[i].PartType.TypeName;
             }
 
             Range c1 = ws.Cells[startingRow, 1];
-            Range c2 = ws.Cells[startingRow + parts.Count - 1, 8];
+            Range c2 = ws.Cells[startingRow + parts.Count - 1, 6];
             BorderCells(c1, c2);
 
             return parts.Count;
